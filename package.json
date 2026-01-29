@@ -2,9 +2,13 @@
   "name": "elbetitsa-event-calendar",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "description": "Elbetitsa mobile app for scheduling repetitions and events (concerts and festival trips)",
+  "author": {
+    "name": "SlaviTod",
+    "email": "slavkatodorova@gmail.com"
+  },
   "scripts": {
     "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
