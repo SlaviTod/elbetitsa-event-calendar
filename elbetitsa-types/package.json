@@ -1,0 +1,20 @@
+{
+  "name": "elbetitsa-types",
+  "version": "1.0.0",
+  "description": "Types Library for Elbetitsa App",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsup"
+  },
+  "keywords": [],
+  "author": "SlaviTod",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^10.0.0",
+    "prettier": "^3.8.1",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  },
+  "private": true
+}
