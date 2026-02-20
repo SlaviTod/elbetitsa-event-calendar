@@ -4,7 +4,6 @@ import { Role } from "./Role";
 
 export interface User extends Timestamps {
   userId: UUID;
-  number: number;
   firstName: string;
   lastName: string;
   email: EmailAddress;

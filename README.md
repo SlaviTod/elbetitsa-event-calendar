@@ -7,11 +7,18 @@ This application is a mobile app for vocal ensemble Elbetitsa (https://elbetitsa
 
 The app is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-1. The first step before running the app is to install all dependencies.
+1. The first step before running the app is to install all dependencies of the project (in directory elbetitsa-event-calendar)
    npm install
 
-2. Start the app
-   npx expo start
+2. The app used Elbetitsa types, so before starting the app:
+    2.1. Install all dependencies (in directory elbetitsa-event-calendar)
+        npm install 
+    2.2. Build types 
+        npm run build 
+
+3. Start the app 
+   npx expo start       or
+   npm start
 
 In the output, you'll find options to open the app in a
 
@@ -90,7 +97,7 @@ The mobile app uses an existing api (https://elbetitsa.eu/api) which has:
    requires:   languageId, default: 1 [bg], 
                itemsPerPage, default: 5,
                currentPage, default: 1
-   supports:   search  
+   supports:   search by event title
    * /articles - at the moment it is only used for the 'about-us' section (requires languageId, default: 1 [bg]);
    * /users - for the user registration.
 - some private routes, used to create/update/delete events, update profile, etc. that already exist;
@@ -99,7 +106,7 @@ The mobile app uses an existing api (https://elbetitsa.eu/api) which has:
    * marking and updating the attendance for private events.
 
 ### Elbetitsa types 
-All used types, such as entity models, api requests & responses, enumerations, etc. are stored in the Elbetitsa TypeScript Library, that is imported in the project.
+All used types, such as entity models, api requests & responses, enumerations, etc. are stored in the Elbetitsa TypeScript Library (the project can be found in elbetitsa-types folder), that is imported in the project.
 
 ## Data Operations (CRUD)
 Describe the implemented data operations:
