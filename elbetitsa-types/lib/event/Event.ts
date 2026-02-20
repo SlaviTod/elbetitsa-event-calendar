@@ -7,6 +7,7 @@ export interface CalendarEvent extends Timestamps {
   dirName: string;
   start: Date;
   end: Date;
+  durationInMinutes?: number;
   timeZone: TimeZone;
   mapLink: string | null;
   embedMapLink: string | null;
