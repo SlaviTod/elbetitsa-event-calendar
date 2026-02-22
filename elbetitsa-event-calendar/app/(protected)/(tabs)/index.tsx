@@ -14,7 +14,7 @@ export default function HomeScreen() {
       headerImage={
         <Image
           source={require('@/assets/images/2025-4-Al-Nevski-0.jpg')}
-          style={styles.reactLogo}
+          style={styles.image}
         />
       }>
       <ThemedView style={styles.titleContainer}>
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 8,
   },
-  reactLogo: {
+  image: {
     height: "100%",
     width: '100%',
     bottom: 0,

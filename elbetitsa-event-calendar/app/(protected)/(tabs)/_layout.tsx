@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { Colors } from '@/constants/theme';
+import { Colors } from '@/styling/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 

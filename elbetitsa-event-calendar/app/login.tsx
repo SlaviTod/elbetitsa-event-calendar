@@ -1,8 +1,10 @@
+import { StyleSheet } from 'react-native';
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Image } from 'expo-image';
-import { StyleSheet } from 'react-native';
+import { LoginForm } from '@/components/LoginForm/LoginForm';
+
 
 export default function LogIn() {
 
@@ -16,9 +18,10 @@ export default function LogIn() {
         />
       }>
       <ThemedView style={styles.mainContainer}>
-          
-          <ThemedText type="title">Log in the Platform</ThemedText>
-          
+
+        <ThemedText type="title">Log in the Platform</ThemedText>
+        <LoginForm />
+
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -30,8 +33,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   image: {
-    height: 500,
+    height: "100%",
     width: '100%',
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
   },
   title: {
     alignSelf: 'center',

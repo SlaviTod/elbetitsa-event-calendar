@@ -1,4 +1,4 @@
-import { ElbetitsaApiCalls, HTTPmethod, RequesterArgs, RequesterOptions } from "../../elbetitsa-types/dist";
+import { ElbetitsaApiCalls, HTTPmethod, RequesterArgs } from "../../elbetitsa-types/dist";
 
 
 export const requester = async ({

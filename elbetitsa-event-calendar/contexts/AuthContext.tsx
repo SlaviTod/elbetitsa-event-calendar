@@ -1,4 +1,4 @@
-import { User } from '../../elbetitsa-types';
+import { LoginResponse, User } from '../../elbetitsa-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
@@ -7,7 +7,7 @@ export type AuthState = {
   token: string;
   isLoggedIn: boolean;
   isReady: boolean;
-  logIn: ({ user, token }: { user: User, token: string }) => void;
+  logIn: ({ user, token }: LoginResponse) => void;
   logOut: () => void;
 }
 
