@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +28,9 @@
       "output": "static",
       "favicon": "./assets/images/logo.png"
     },
+    "locales": {
+      "bg": "./translator/app-metadata/bg.json"
+    },
     "plugins": [
       "expo-router",
       [
@@ -36,6 +42,21 @@
           "backgroundColor": "#ffffff",
           "dark": {
             "backgroundColor": "#000000"
+          }
+        }
+      ],
+      [
+        "expo-localization",
+        {
+          "supportedLocales": {
+            "ios": [
+              "en",
+              "bg"
+            ],
+            "android": [
+              "en",
+              "bg"
+            ]
           }
         }
       ]
