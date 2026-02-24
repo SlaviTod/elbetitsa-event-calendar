@@ -10,7 +10,7 @@ export const LoginValidationSchema = (t: any) => Yup.object().shape({
         .email(t('err_email'))
         .required(t('err_email_required')),
     password: Yup.string()
-        .required(t('err_pass_required'))
         .min(validationRequirements.password.min, t('err_pass_min'))
         .max(validationRequirements.password.max, t('err_pass_max'))
+        .required(t('err_pass_required'))
 });

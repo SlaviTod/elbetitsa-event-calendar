@@ -1,29 +1,26 @@
 import { useContext } from "react";
 import { Alert } from "react-native";
-import { AuthContext } from "@/contexts/AuthContext";
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
+import { AuthContext } from "@/contexts/AuthContext";
 
 
 export default function Calendar() {
 
-    const { isLoggedIn } = useContext(AuthContext);
-    const router = useRouter();
+  const { isLoggedIn } = useContext(AuthContext);
+  const router = useRouter();
+  const { t } = useTranslation();
 
-    
 
-    if (!isLoggedIn) {
-      Alert.alert('Action needed', 'In order to see that part of the app you should log in', [{
-        text: 'Cancel',
-        style: 'cancel',
-      }, {
-        text: 'Go to LogIn',
-        style: 'destructive',
-        onPress: () => router.navigate('/login'),
-      }])
-    }
+  if (!isLoggedIn) {
+    Alert.alert(t('actionNeed'), t('notauth_sub'), [{
+      text: t('goLogin')
+    }]);
+    return (<Redirect href="/login" />);
+  }
 
-    
+
 
   return (
     <></>

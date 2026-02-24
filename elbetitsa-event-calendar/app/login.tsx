@@ -1,12 +1,18 @@
-import { StyleSheet } from 'react-native';
 import ParallaxScrollView from "@/components/parallax-scroll-view";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+import { ThemedText } from "@/components/themed-components/themed-text";
+import { ThemedView } from "@/components/themed-components/themed-view";
 import { Image } from 'expo-image';
 import { LoginForm } from '@/components/LoginForm/LoginForm';
+import { useTranslation } from 'react-i18next';
+import { commonStyles, containers } from '@/styling/common';
+import { IconButton } from '@/components/buttons/IconButton';
+import { useRouter } from 'expo-router';
+
 
 
 export default function LogIn() {
+  const { t } = useTranslation();
+  const router = useRouter();
 
   return (
     <ParallaxScrollView
@@ -14,38 +20,19 @@ export default function LogIn() {
       headerImage={
         <Image
           source={require('@/assets/images/2025-4-Al-Nevski-0.jpg')}
-          style={styles.image}
+          style={commonStyles.headerImage}
         />
       }>
-      <ThemedView style={styles.mainContainer}>
+      <ThemedView style={containers.mainContainer}>
 
-        <ThemedText type="title">Log in the Platform</ThemedText>
+        <ThemedView style={containers.titleWithIconButton}>
+          <ThemedText type="title" style={commonStyles.title}>{t('login_sub')}</ThemedText>
+          <IconButton name="return-up-back" size={26} onPressHandler={() => router.navigate('/')} />
+        </ThemedView>
+
         <LoginForm />
 
       </ThemedView>
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
-  image: {
-    height: "100%",
-    width: '100%',
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-  title: {
-    alignSelf: 'center',
-  },
-  seasonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 100,
-  }
-});

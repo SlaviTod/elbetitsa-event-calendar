@@ -5,8 +5,9 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link' | 'mini';
+  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link' | 'mini' | "linkMini" | "error";
 };
+
 
 export function ThemedText({
   style,
@@ -15,7 +16,27 @@ export function ThemedText({
   type = 'default',
   ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+
+  let color: string; 
+  
+  switch (type) {
+    case 'default':
+    case 'defaultSemiBold':
+    case 'title':
+    case 'subtitle':
+    case 'mini':
+      color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+      break;
+    case 'link':
+    case 'linkMini': 
+      color = useThemeColor({ light: lightColor, dark: darkColor }, 'link');
+      break;
+    case 'error': 
+      color = useThemeColor({ light: lightColor, dark: darkColor }, 'notification');
+      break;
+  }
+
+    
 
   return (
     <Text
@@ -27,6 +48,7 @@ export function ThemedText({
         type === 'subtitle' ? styles.subtitle : undefined,
         type === 'link' ? styles.link : undefined,
         type === 'mini' ? styles.mini : undefined,
+        type === 'error' ? styles.default : undefined,
         style,
       ]}
       {...rest}
@@ -56,10 +78,12 @@ const styles = StyleSheet.create({
   link: {
     lineHeight: 30,
     fontSize: 16,
-    color: '#0a7ea4', // TODO 
+  },
+  linkMini: {
+    lineHeight: 30,
+    fontSize: 12,
   },
   mini: {
-    lineHeight: 10,
-    fontSize: 10,
+    fontSize: 12,
   },
 });

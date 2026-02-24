@@ -6,6 +6,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function TabLayout() {
+  // TODO replace with useThemeColor
   const colorScheme = useColorScheme();
 
   return (
