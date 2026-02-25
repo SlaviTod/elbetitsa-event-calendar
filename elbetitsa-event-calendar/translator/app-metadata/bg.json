@@ -1,0 +1,13 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "Елбетица Календар",
+    "NSContactsUsageDescription": "Календар за събития на Вокален ансамбъл Елбетица",
+    "Localizable.strings": {
+      "HELLO_NOTIFICATION_KEY": "Добре дошли в Календара на Вокален ансамбъл Елбетица"
+    }
+  },
+  "android": {
+    "app_name": "Елбетица Календар",
+    "HELLO_NOTIFICATION_KEY": "Добре дошли в Календара на Вокален ансамбъл Елбетица"
+  }
+}

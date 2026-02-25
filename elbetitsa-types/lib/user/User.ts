@@ -1,13 +1,12 @@
-import { EmailAddress, Timestamps, UUID, Voice } from "../shared"
+import { Timestamps, Voice } from "../shared"
 import { Role } from "./Role";
 
 
 export interface User extends Timestamps {
-  userId: UUID;
-  number: number;
+  userId: string;
   firstName: string;
   lastName: string;
-  email: EmailAddress;
+  email: string;
   role: Role;
   voice: Voice | null;
   isBlocked: boolean;

@@ -1,6 +1,4 @@
-import { Timestamps } from "../shared";
-
-export interface Language extends Timestamps {
+export interface Language {
   id: number;
   label: string;
   code: string;
