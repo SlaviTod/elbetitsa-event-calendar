@@ -1,5 +1,6 @@
-import { ElbetitsaApiCalls, HTTPmethod, RequesterArgs } from "../../elbetitsa-types/dist";
+import { ElbetitsaApiCalls, HTTPmethod, RequesterArgs } from "@/types/dist";
 
+const apiHost = process.env.EXPO_PUBLIC_API_URL;
 
 export const requester = async ({
   method,
@@ -37,7 +38,9 @@ export const requester = async ({
     options.body = formData;
   }
 
-  const response = await fetch(`${url}${queryString}`, options);
+  console.log(`${method} url ${apiHost}${url}${queryString}`)
+
+  const response = await fetch(`${apiHost}${url}${queryString}`, options);
 
   const result = await response.json();
 

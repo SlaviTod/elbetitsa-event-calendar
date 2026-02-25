@@ -1,4 +1,4 @@
-import { Language } from "../../elbetitsa-types/dist";
+import { Language } from "@/types/dist";
 
 export const LANGUAGES: Language[] = [
     { id: 1, label: 'Bulgarian', code: 'bg', imgUrl: `/public/images/flags/bg.png`, },

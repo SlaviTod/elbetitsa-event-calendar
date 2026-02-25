@@ -1,8 +1,7 @@
-import { EmailAddress } from "../shared";
 import { User } from "../user";
 
 export interface LoginRequest {
-  email: EmailAddress;
+  email: string;
   password: string; 
 }
 

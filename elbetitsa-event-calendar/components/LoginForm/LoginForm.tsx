@@ -1,27 +1,50 @@
-import React, { useState } from 'react';
-import { Text, Pressable, KeyboardAvoidingView, Platform } from "react-native";
-import { Link } from 'expo-router';
+import React, { useContext, useState } from 'react';
+import { Text, Pressable, KeyboardAvoidingView, Platform, Alert } from "react-native";
+import { Link, useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import { useTranslation } from "react-i18next";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import { LoginRequest } from "../../../elbetitsa-types/dist";
 import { ThemedView } from "../themed-components/themed-view";
 import { ThemedText } from "../themed-components/themed-text";
 import { ThemedInput } from '../themed-components/themed-input';
 import { IconButton } from '../buttons/IconButton';
 import { LoginValidationSchema } from "./validateLoginForm";
 import { commonStyles, containers } from '@/styling/common';
+import { requester } from '@/requester/requester';
+import { AuthContext } from '@/contexts/AuthContext';
+import { ApiEndpoints, HTTPmethod, LoginRequest, LoginResponse } from '@/types/dist';
 
 
 export const LoginForm = () => {
 
   const { t } = useTranslation();
+  const router = useRouter();
+  const { logIn } = useContext(AuthContext);
 
-  /* TODO isFirstLogin => welcome alert  */
+  const [isSend, setIsSend] = useState(false);
 
-  const onSubmit = (values: LoginRequest) => {
-    // TODO requester 
+  const onSubmit = async (values: LoginRequest) => {
+    setIsSend(true);
+    try {
+      const res = await requester({
+        method: HTTPmethod.post,
+        url: ApiEndpoints.auth,
+        formData: values,
+      });
+      const { user, token } = res;
+      logIn({ user, token });
+      // TODO  
+      // router.dismissTo('calendar'); 
+      router.dismissTo('/profile');
+
+    } catch (err) {
+      Alert.alert(t('error'), `${t('login_msg_error')}. ${t('tryAgain')}`, [{
+        text: t('close')
+      }])
+      console.log('Log error', err);
+      setIsSend(false);
+    }
   }
 
   const [hidePass, setHidePass] = useState(true);
@@ -33,7 +56,7 @@ export const LoginForm = () => {
   return (<>
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
       <Formik
-        initialValues={{ email: '', password: '', }}
+        initialValues={{ email: '', password: '' } as LoginRequest}
         validationSchema={LoginValidationSchema(t)}
         onSubmit={values => onSubmit(values)}
       >
@@ -83,7 +106,7 @@ export const LoginForm = () => {
 
 
             <Pressable style={commonStyles.themedButtonWithIcon}
-              onPress={() => handleSubmit()}>
+              onPress={() => handleSubmit()} disabled={isSend}>
               <Ionicons name="log-in-outline" size={26} color={commonStyles.themedButtonWithIcon.color} />
               <Text style={commonStyles.subtitle}>{t('login')}</Text>
             </Pressable>

@@ -1,5 +1,5 @@
-import { LoginResponse, User } from '../../elbetitsa-types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LoginResponse, User } from '@/types/dist';
+import * as SecureStore from 'expo-secure-store';
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
 export type AuthState = {
@@ -33,20 +33,20 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setUser(user);
     setToken(token);
     setIsLoggedIn(true);
-    storeAuthState({ user, token, isLoggedIn: true });
+    storeAuthState({ user, token });
   }
 
   const logOut = () => {
     setUser({} as User);
     setToken('');
     setIsLoggedIn(false);
-    storeAuthState({ user: {} as User, token: '', isLoggedIn: false });
+    storeAuthState({ user: {} as User, token: '' });
   }
 
-  const storeAuthState = async (newState: { user: User, token: string, isLoggedIn: boolean }) => {
+  const storeAuthState = async (newState: { user: User, token: string }) => {
     try {
       const val = JSON.stringify(newState);
-      await AsyncStorage.setItem(authStorageKey, val);
+      await SecureStore.setItem(authStorageKey, val);
     } catch (err) {
       console.log('Error saving auth', err);
     }
@@ -55,12 +55,13 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const getAuthFromStorage = async () => {
       try {
-        const json = await AsyncStorage.getItem(authStorageKey);
+        const json = await SecureStore.getItem(authStorageKey);
         if (json) {
           const persisted = JSON.parse(json);
-          console.log(persisted);
+
           setUser(persisted.user);
-          setIsLoggedIn(persisted.isLoggedIn);
+          setToken(persisted.token);
+          setIsLoggedIn(persisted.token && persisted.user?.id ? true : false);
         }
       } catch (err) {
         console.log('Error retrieving auth', err);

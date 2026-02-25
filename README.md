@@ -107,6 +107,7 @@ The mobile app uses an existing api (https://elbetitsa.eu/api) which has:
 
 ### Elbetitsa types 
 All used types, such as entity models, api requests & responses, enumerations, etc. are stored in the Elbetitsa TypeScript Library (the project can be found in elbetitsa-types folder), that is imported in the project.
+After the .envs for api requests were added in order to build app the Elbetitsa types (/dist folder) should be added in types folder of the app. 
 
 ## Data Operations (CRUD)
 Describe the implemented data operations:

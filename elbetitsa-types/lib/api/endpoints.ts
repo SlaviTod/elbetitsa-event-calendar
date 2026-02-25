@@ -1,9 +1,9 @@
 export enum ApiEndpoints {
-  languages = 'https://elbetitsa.eu/api/languages',
-  publicEvents = 'https://elbetitsa.eu/api/events',
-  events = 'https://elbetitsa.eu/api/mobile/events',
-  auth = 'https://elbetitsa.eu/api/mobile/auth',
-  register = 'https://elbetitsa.eu/api/users',
+  languages = '/languages',
+  publicEvents = '/events',
+  events = '/mobile/events',
+  auth = '/mobile/auth',
+  register = '/users',
 }
 
 export enum HTTPmethod {

@@ -1,4 +1,4 @@
-import { Timestamps, TimeZone } from "../shared";
+import { Timestamps } from "../shared";
 import { EventType } from "./EventType";
 
 export interface CalendarEvent extends Timestamps {
@@ -8,7 +8,7 @@ export interface CalendarEvent extends Timestamps {
   start: Date;
   end: Date;
   durationInMinutes?: number;
-  timeZone: TimeZone;
+  timeZone: string;
   mapLink: string | null;
   embedMapLink: string | null;
   videoLinks: string[];
