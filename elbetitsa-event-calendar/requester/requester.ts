@@ -1,4 +1,4 @@
-import { ElbetitsaApiCalls, HTTPmethod, RequesterArgs } from "@/types/dist";
+import { HTTPmethod, RequesterArgs } from "@/types/dist";
 
 const apiHost = process.env.EXPO_PUBLIC_API_URL;
 
@@ -7,6 +7,7 @@ export const requester = async ({
   url,
   token,
   formData,
+  queryKeys,
   queries,
   file,
 }: RequesterArgs) => {
@@ -24,7 +25,6 @@ export const requester = async ({
   if (token) options.headers = { ...options.headers, 'authorization': `Bearer ${token}` };
 
   if (queries) {
-    const queryKeys = ElbetitsaApiCalls[url][method]?.queries;
     if (queryKeys?.length) {
       queryKeys.forEach((key, index) => {
         if (queries[key]) queryString += `${index ? '&' : '?'}${key}=${encodeURIComponent(queries[key])}`;

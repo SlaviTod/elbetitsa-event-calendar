@@ -1,4 +1,5 @@
 import { LoginResponse, User } from '@/types/dist';
+import { SplashScreen } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
@@ -33,17 +34,17 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setUser(user);
     setToken(token);
     setIsLoggedIn(true);
-    storeAuthState({ user, token });
+    storeAuthState({ user, token, isLoggedIn: true });
   }
 
   const logOut = () => {
     setUser({} as User);
     setToken('');
     setIsLoggedIn(false);
-    storeAuthState({ user: {} as User, token: '' });
+    storeAuthState({ user: {} as User, token: '', isLoggedIn: false });
   }
 
-  const storeAuthState = async (newState: { user: User, token: string }) => {
+  const storeAuthState = async (newState: { user: User, token: string, isLoggedIn: boolean }) => {
     try {
       const val = JSON.stringify(newState);
       await SecureStore.setItem(authStorageKey, val);
@@ -61,7 +62,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
           setUser(persisted.user);
           setToken(persisted.token);
-          setIsLoggedIn(persisted.token && persisted.user?.id ? true : false);
+          setIsLoggedIn(persisted.isLoggedIn);
         }
       } catch (err) {
         console.log('Error retrieving auth', err);
@@ -70,6 +71,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     };
     getAuthFromStorage();
   }, [])
+
+    useEffect(() => {
+    if (isReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [isReady]);
 
   return (
     <AuthContext.Provider value={{ user, token, isLoggedIn, isReady, logIn, logOut }} >

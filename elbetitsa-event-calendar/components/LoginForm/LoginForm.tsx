@@ -13,7 +13,8 @@ import { LoginValidationSchema } from "./validateLoginForm";
 import { commonStyles, containers } from '@/styling/common';
 import { requester } from '@/requester/requester';
 import { AuthContext } from '@/contexts/AuthContext';
-import { ApiEndpoints, HTTPmethod, LoginRequest, LoginResponse } from '@/types/dist';
+import { ApiEndpoints, ElbetitsaApiCalls, LoginRequest, LoginResponse } from '@/types/dist';
+import { useRequesterArgs } from '@/hooks/useRequesterArgs';
 
 
 export const LoginForm = () => {
@@ -24,22 +25,24 @@ export const LoginForm = () => {
 
   const [isSend, setIsSend] = useState(false);
 
+  const requestArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.login] })
+
   const onSubmit = async (values: LoginRequest) => {
     setIsSend(true);
     try {
-      const res = await requester({
-        method: HTTPmethod.post,
-        url: ApiEndpoints.auth,
+      const res: LoginResponse = await requester({
+        ...requestArgs,
         formData: values,
       });
-      const { user, token } = res;
-      logIn({ user, token });
+
+      logIn(res);
       // TODO  
       // router.dismissTo('calendar'); 
       router.dismissTo('/profile');
 
-    } catch (err) {
-      Alert.alert(t('error'), `${t('login_msg_error')}. ${t('tryAgain')}`, [{
+    } catch (err: Error | unknown) {
+      // @ts-expect-error ​
+      Alert.alert(t('error'), `${t('login_msg_error')}. ${err instanceof Error ? t(err.message) : ''}. ${t('tryAgain')}`, [{
         text: t('close')
       }])
       console.log('Log error', err);

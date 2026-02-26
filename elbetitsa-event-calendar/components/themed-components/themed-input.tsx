@@ -14,11 +14,13 @@ export function ThemedInput({
   lightColor,
   darkColor,
   hideText = true,
+  editable = true,
   type = 'default',
   ...otherProps }: ThemedInputProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
   const placeColor = useThemeColor({ light: lightColor, dark: darkColor }, 'placeholder');
 
+  if (!editable) return (<TextInput style={[{ color: placeColor }, style]} {...otherProps} />);
   if (type !== 'password' || !hideText) return (<TextInput placeholderTextColor={placeColor} style={[{ color }, style]} {...otherProps} />);
 
   return (<TextInput secureTextEntry={hideText} placeholderTextColor={placeColor} style={[{ color }, style]} {...otherProps} />);

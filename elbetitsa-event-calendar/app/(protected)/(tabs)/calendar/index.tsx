@@ -9,7 +9,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 export default function Calendar() {
 
   const { isLoggedIn } = useContext(AuthContext);
-  const router = useRouter();
+
   const { t } = useTranslation();
 
 

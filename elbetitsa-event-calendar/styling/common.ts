@@ -36,6 +36,8 @@ export const containers = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    gap: 10,
+    padding: 20,
   },
   titleWithIconButton: {
     flexDirection: "row",
@@ -55,6 +57,7 @@ export const containers = StyleSheet.create({
     borderColor: 'orange',
     borderStyle: 'solid',
     borderRadius: 10,
+    overflow: 'hidden',
   },
   passContainer: {
     flexDirection: 'row',
@@ -72,6 +75,9 @@ export const containers = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  avatarContainer: {
+    alignSelf: 'center',
+  }
 })
 
 export const commonStyles = StyleSheet.create({
@@ -88,11 +94,13 @@ export const commonStyles = StyleSheet.create({
     minWidth: 190,
   },
   input: {
+    fontSize: 16,
     flex: 1,
     height: 50,
     paddingLeft: 20,
   },
   inputPass: {
+    fontSize: 16,
     flex: 1,
     height: 50,
   },
@@ -108,6 +116,22 @@ export const commonStyles = StyleSheet.create({
   },
   title: {
     alignSelf: 'center',
+  },
+  avatar: {
+    maxWidth: 50,
+    maxHeight: 50,
+    width: 50,
+    height: 50,
+    objectFit: 'cover',
+    borderRadius: 25,
+  },
+  avatarPhoto: {
+    maxWidth: 250,
+    maxHeight: 250,
+    width: 250,
+    height: 250,
+    objectFit: 'cover',
+    borderRadius: 125,
   },
 // TODO 
 
@@ -125,6 +149,14 @@ export const commonStyles = StyleSheet.create({
     fontWeight: 'bold',
   }
 });
+
+export const pickerStyles = StyleSheet.create({
+  picker: {
+    fontSize: 16,
+    height: 50,
+    marginLeft: 10,
+  }
+})
 
 
 export const commonFlexStyles = StyleSheet.create({
