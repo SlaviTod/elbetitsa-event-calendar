@@ -18,7 +18,7 @@ export const Colors = {
     text: 'rgb(28, 28, 28)',
     background: '#ffffff',
     tint: tintColorLight,
-    icon: '#687076', // TODO 
+    icon: themePrimary, 
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
     border: 'rgb(216, 216, 216)',
