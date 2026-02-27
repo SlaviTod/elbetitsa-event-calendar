@@ -40,6 +40,11 @@ export default function RootLayout() {
                   animation: 'none',
                 }} />
               </Stack.Protected>
+              <Stack.Screen name="logout" options={{
+                title: 'LogOut',
+                headerShown: false,
+                animation: 'none',
+              }} />
             </Stack>
             <StatusBar style="auto" />
           </AuthProvider>

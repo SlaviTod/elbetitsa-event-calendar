@@ -1,9 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { Text, Pressable, KeyboardAvoidingView, Platform, Alert } from "react-native";
+import { KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { Link } from 'expo-router';
 import { Formik } from 'formik';
 import { useTranslation } from "react-i18next";
-import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { ThemedView } from "../themed/themed-view";
 import { ThemedText } from "../themed/themed-text";
@@ -26,7 +25,7 @@ export const LoginForm = () => {
 
   const [isSend, setIsSend] = useState(false);
 
-  const requestArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.login] })
+  const requestArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.login] });
 
   const onSubmit = async (values: LoginRequest) => {
     setIsSend(true);
@@ -103,8 +102,8 @@ export const LoginForm = () => {
               </Link>
               <ThemedText type="mini">{t('register_msg_2')}</ThemedText>
             </ThemedView>
-            {/* TODO test */}
-            {/* <ThemeButton
+
+            <ThemeButton
               buttonStyle={commonStyles.themedButtonWithIcon}
               handler={() => handleSubmit()}
               disabled={isSend}
@@ -113,13 +112,8 @@ export const LoginForm = () => {
               iconColor={commonStyles.themedButtonWithIcon.color}
               textStyle={commonStyles.subtitle}
               buttonText={t('login')}
-            /> */}
+            />
 
-            <Pressable style={commonStyles.themedButtonWithIcon}
-              onPress={() => handleSubmit()} disabled={isSend}>
-              <Ionicons name="log-in-outline" size={26} color={commonStyles.themedButtonWithIcon.color} />
-              <Text style={commonStyles.subtitle}>{t('login')}</Text>
-            </Pressable>
           </ThemedView>
         </>)}
       </Formik >

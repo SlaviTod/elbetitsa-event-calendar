@@ -2,10 +2,10 @@ import { Pressable, StyleProp, ViewStyle } from "react-native"
 import { IconType, ThemedIcon } from "../themed/themed-icon"
 
 type IconButtonProps = {
-  style?: StyleProp<ViewStyle>,
-  name: string,
+  style?: StyleProp<ViewStyle>;
+  name: string;
   type?: IconType;
-  size: number,
+  size: number;
   onPressHandler: () => void,
 }
 
@@ -18,7 +18,7 @@ export const IconButton = ({
 }: IconButtonProps) => {
 
   return (
-    <Pressable style={[style, { paddingHorizontal: 10 }]} onPress={() => onPressHandler()}>
+    <Pressable style={[{ paddingHorizontal: 10 }, style]} onPress={() => onPressHandler()}>
       <ThemedIcon name={name} size={size} type={type}/>
     </Pressable>
   )

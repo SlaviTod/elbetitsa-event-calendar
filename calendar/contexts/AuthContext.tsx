@@ -39,15 +39,15 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     storeAuthState({ user, token, isLoggedIn: true });
     // TODO  
     // router.dismissTo('calendar'); 
-    router.dismissTo('/profile');
+    router.replace('/profile');
   }
 
-  const logOut = () => {
+  const logOut = async () => {
+    setIsReady(false);
+    await storeAuthState({ user: {} as User, token: '', isLoggedIn: false });
     setUser({} as User);
     setToken('');
     setIsLoggedIn(false);
-    storeAuthState({ user: {} as User, token: '', isLoggedIn: false });
-    router.navigate('/');
   }
 
   const storeAuthState = async (newState: { user: User, token: string, isLoggedIn: boolean }) => {

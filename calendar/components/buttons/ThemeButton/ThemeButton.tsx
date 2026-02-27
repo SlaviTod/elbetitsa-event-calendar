@@ -27,7 +27,7 @@ export const ThemeButton = ({
   return (
     <Pressable style={buttonStyle} onPress={handler} disabled={disabled}>
       <Ionicons name={iconName} size={iconSize} color={iconColor} />
-      <Text style={textStyle}>{buttonText}</Text>
+      {buttonText && <Text style={textStyle}>{buttonText}</Text>}
     </Pressable>
   );
 }

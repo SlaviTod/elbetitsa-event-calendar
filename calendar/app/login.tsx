@@ -9,7 +9,6 @@ import { IconButton } from '@/components/buttons/IconButton';
 import { useRouter } from 'expo-router';
 
 
-
 export default function LogIn() {
   const { t } = useTranslation();
   const router = useRouter();

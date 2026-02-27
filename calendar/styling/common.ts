@@ -32,6 +32,11 @@ export const GAPS = {
 
 
 export const containers = StyleSheet.create({
+  flexCenter: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   mainContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
@@ -74,6 +79,7 @@ export const containers = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     marginBottom: 20,
+    gap: 2,
   },
   avatarContainer: {
     alignSelf: 'center',
@@ -133,8 +139,8 @@ export const commonStyles = StyleSheet.create({
     objectFit: 'cover',
     borderRadius: 125,
   },
-  
-// TODO 
+
+  // TODO 
 
   default: {
     fontSize: 16,

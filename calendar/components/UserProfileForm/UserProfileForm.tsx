@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { Text, Pressable, KeyboardAvoidingView, Platform, Alert } from "react-native";
+import { KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { Formik } from 'formik';
 import { useTranslation } from "react-i18next";
-import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { ThemedView } from "../themed/themed-view";
 import { ThemedText } from "../themed/themed-text";
@@ -77,7 +76,6 @@ export const UserProfileForm = ({
 
             <ThemedText type='subtitle'>{t('updateUser')}</ThemedText>
 
-
             <ThemedView style={containers.inputWr}>
               <ThemedInput
                 style={commonStyles.input}
@@ -136,7 +134,7 @@ export const UserProfileForm = ({
 
 
             <ThemeButton
-              buttonStyle={[commonStyles.themedButtonWithIcon, {  padding: 10 }]}
+              buttonStyle={[commonStyles.themedButtonWithIcon, { padding: 10 }]}
               handler={() => handleSubmit()}
               disabled={isSend}
               iconName="save"

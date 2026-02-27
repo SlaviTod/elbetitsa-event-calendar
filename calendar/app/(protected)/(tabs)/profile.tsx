@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { Alert, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Image } from 'expo-image';
 import { Redirect } from "expo-router";
 import { useTranslation } from "react-i18next";
 
@@ -34,7 +33,7 @@ export default function Profile() {
 
   // TODO use gallery or take photo 
   const uploadPhoto = () => {
-
+    console.log("TODO upload image")
   }
 
   return (<>
@@ -51,16 +50,9 @@ export default function Profile() {
           <ProfileImage
             avatarUrl={user.avatar}
             imageStyle={commonStyles.avatarPhoto}
-            iconSize={50}
+            iconSize={220}
             handler={uploadPhoto}
           />
-          {/* <ThemedView style={containers.avatarContainer}>
-            {user.avatar && <Image
-              source={`${apiHost}${user.avatar}`}
-              style={commonStyles.avatarPhoto}
-            />}
-            {!user.avatar && <IconButton name="person-circle" size={50} onPressHandler={() => setChangePass(st => !st)} />}
-          </ThemedView> */}
 
           <ThemedText type={'subtitle'}>{user.firstName} {user.lastName}</ThemedText>
           <ThemedText type={'defaultSemiBold'}>{t(user.role)} </ThemedText>
