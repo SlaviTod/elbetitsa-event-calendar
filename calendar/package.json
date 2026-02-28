@@ -37,6 +37,7 @@
     "expo-web-browser": "~15.0.10",
     "formik": "^2.4.9",
     "i18next": "^25.8.13",
+    "luxon": "^3.7.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-i18next": "^16.5.4",
@@ -50,6 +51,7 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@types/luxon": "^3.7.1",
     "@types/react": "~19.1.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",

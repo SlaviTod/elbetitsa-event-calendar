@@ -11,6 +11,7 @@ import { AuthContext, AuthProvider } from '@/contexts/AuthContext';
 import { useContext } from 'react';
 import { LngProvider } from '@/contexts/LngContext';
 import { myDarkTheme, myLightTheme } from '@/styling/theme';
+import { DataProvider } from '@/contexts/DataContext';
 
 export const unstable_settings = {
   anchor: '(protected)',
@@ -25,29 +26,31 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ThemeProvider value={colorScheme === 'dark' ? myDarkTheme : myLightTheme} >
         <LngProvider>
-          <AuthProvider>
-            <Stack>
-              <Stack.Screen name="(protected)" options={{ headerShown: false, animation: 'none', }} />
-              <Stack.Protected guard={!isLoggedIn}>
-                <Stack.Screen name="login" options={{
-                  title: 'LogIn',
+          <DataProvider>
+            <AuthProvider>
+              <Stack>
+                <Stack.Screen name="(protected)" options={{ headerShown: false, animation: 'none', }} />
+                <Stack.Protected guard={!isLoggedIn}>
+                  <Stack.Screen name="login" options={{
+                    title: 'LogIn',
+                    headerShown: false,
+                    animation: 'none',
+                  }} />
+                  <Stack.Screen name='register' options={{
+                    title: 'Join us',
+                    headerShown: false,
+                    animation: 'none',
+                  }} />
+                </Stack.Protected>
+                <Stack.Screen name="logout" options={{
+                  title: 'LogOut',
                   headerShown: false,
                   animation: 'none',
                 }} />
-                <Stack.Screen name='register' options={{
-                  title: 'Join us',
-                  headerShown: false,
-                  animation: 'none',
-                }} />
-              </Stack.Protected>
-              <Stack.Screen name="logout" options={{
-                title: 'LogOut',
-                headerShown: false,
-                animation: 'none',
-              }} />
-            </Stack>
-            <StatusBar style="auto" />
-          </AuthProvider>
+              </Stack>
+              <StatusBar style="auto" />
+            </AuthProvider>
+          </DataProvider>
         </LngProvider>
       </ThemeProvider>
     </SafeAreaProvider>

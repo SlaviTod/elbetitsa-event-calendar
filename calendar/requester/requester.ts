@@ -27,7 +27,7 @@ export const requester = async ({
   if (queries) {
     if (queryKeys?.length) {
       queryKeys.forEach((key, index) => {
-        if (queries[key]) queryString += `${index ? '&' : '?'}${key}=${encodeURIComponent(queries[key])}`;
+        queryString += `${index === 0 ? '?' : '&'}${key}=${encodeURIComponent(queries[key])}`;
       });
     }
   }
