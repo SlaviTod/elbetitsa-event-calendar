@@ -1,12 +1,12 @@
 import { Timestamps } from "../shared";
-import { EventType } from "./EventType";
+import { PublicEventType } from "./EventType";
 
-export interface CalendarEvent extends Timestamps {
+export interface PublicEvent extends Timestamps {
   id: number;
-  eventType: EventType;
+  eventType: PublicEventType;
   dirName: string;
-  start: Date;
-  end: Date;
+  start: string; // ISO
+  end: string;
   durationInMinutes?: number;
   timeZone: string;
   mapLink: string | null;
@@ -14,7 +14,7 @@ export interface CalendarEvent extends Timestamps {
   videoLinks: string[];
   images: string[];
   isPublic: boolean;
-  CalendarEventDetails: CalendarEventDetails;
+  CalendarEventDetails: CalendarEventDetails[];
 }
 
 // language specific data 
