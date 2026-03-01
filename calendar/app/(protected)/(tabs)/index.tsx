@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
@@ -11,14 +11,17 @@ import { ApiEndpoints, ElbetitsaApiCalls, GetEventsResponse, PublicEvent } from 
 import { requester } from '@/requester/requester';
 import { EventItem } from '@/components/EventItem/EventItem';
 import { DataContext } from '@/contexts/DataContext';
+import { useThemeColor } from '@/hooks/use-theme-color';
 
 
 export default function HomeScreen() {
 
-  const { data, setPublicData } = useContext(DataContext);
+  const { data, setPublicData, setData } = useContext(DataContext);
+
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const { t } = useTranslation();
 
@@ -48,23 +51,46 @@ export default function HomeScreen() {
     }
   }, [hasMore, page, loading])
 
+  const refreshPublicEvents: () => Promise<void> = useCallback(async () => {
+    if (loading) return;
+    setRefreshing(true);
+    setData({ events: [] });
+    setPage(1);
+    setHasMore(true);
+    await loadPublicEvents();
+    setRefreshing(false);
+  }, []);
+
   useEffect(() => {
-    loadPublicEvents();
-  }, [loadPublicEvents])
+    refreshPublicEvents();
+  }, [])
+
+  const color = useThemeColor({}, 'primary');
+  const bgcolor = useThemeColor({}, 'background');
 
   return (
     <SafeAreaView style={containers.mainContainer}>
 
-      {!!data.events?.length &&
-        <FlatList
-          data={data.events}
-          renderItem={({ item }: { item: PublicEvent }) => <EventItem item={item} key={item.id} />}
-        />
-      }
+      <FlatList
+        data={data.events}
+        renderItem={({ item }: { item: PublicEvent }) => <EventItem item={item} key={item.id} />}
+        onEndReached={loadPublicEvents}
+        onEndReachedThreshold={0}
 
-      {hasMore && <ThemedView style={styles.titleContainer}>
-        <ThemedText>...{t('seeMore')}</ThemedText>
-      </ThemedView>}
+        refreshControl={<RefreshControl
+          refreshing={refreshing}
+          onRefresh={refreshPublicEvents}
+          colors={[color]}
+          progressBackgroundColor={bgcolor}
+          tintColor={color}
+        />}
+
+        ListFooterComponent={<>
+          {hasMore && <ThemedView style={styles.titleContainer}>
+            <ThemedText>...{t('seeMore')}</ThemedText>
+          </ThemedView>}
+        </>}
+      />
     </SafeAreaView>
   );
 }

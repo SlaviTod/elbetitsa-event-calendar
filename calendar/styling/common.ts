@@ -122,6 +122,7 @@ export const commonStyles = StyleSheet.create({
   },
   title: {
     alignSelf: 'center',
+    textAlign: 'center',
   },
   avatar: {
     maxWidth: 50,
@@ -145,6 +146,11 @@ export const commonStyles = StyleSheet.create({
   default: {
     fontSize: 16,
     lineHeight: 24,
+  },
+  titleText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    lineHeight: 32,
   },
   subtitle: {
     fontSize: 20,
