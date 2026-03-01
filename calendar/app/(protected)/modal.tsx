@@ -7,7 +7,7 @@ import { ThemedView } from '@/components/themed/themed-view';
 import { useContext } from 'react';
 import { DataContext } from '@/contexts/DataContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { containers } from '@/styling/common';
+import { commonStyles, containers } from '@/styling/common';
 import { DateTime } from 'luxon';
 import { IconButton } from '@/components/buttons/IconButton';
 
@@ -23,27 +23,35 @@ export default function ModalScreen() {
   const { data } = useContext(DataContext);
   const event = data.events.find(el => el.id == item.id);
 
-  // TODO => gallery slide images + gesture  
 
   return (
     <SafeAreaView style={containers.mainContainer}>
-      <ScrollView>
-        <ThemedView style={containers.mainContainer}>
-          <IconButton style={{ alignSelf: 'flex-start'}} name="return-up-back" size={26} onPressHandler={() => router.navigate('/')} />
-          <ThemedText type="title">{event?.CalendarEventDetails[0].title}</ThemedText>
+      <ThemedView style={[containers.titleWithIconButton]}>
+        <ThemedView>
+          <ThemedText type="title" style={commonStyles.title}>{event?.CalendarEventDetails[0].title}</ThemedText>
           {event?.start && <ThemedText type="title">{DateTime.fromISO(event.start).setLocale('bg').toFormat('d LLLL yyyy')}</ThemedText>}
+        </ThemedView>
+        <IconButton name="return-up-back" size={26} onPressHandler={() => router.navigate('/')} />
+      </ThemedView>
+      <ScrollView>
+        <ThemedView >
           <ThemedText type="subtitle">{event?.CalendarEventDetails[0].subTitle}</ThemedText>
           <ThemedText>{event?.CalendarEventDetails[0].description}</ThemedText>
 
-          <ThemedView style={styles.imageContainer}>
-            <Image
-              style={styles.imageBg}
-              source={`${apiHost}${!!event?.images?.length ? event.images[0] : '/public/images/borisova.jpg'}`}
-            />
-            {/* <ThemedView style={styles.galleryContainer}>
+          {/* TODO Expo Video (expo-video) */}
+          <ScrollView horizontal={true}>
+            <ThemedView style={styles.galleryContainer}>
 
-            </ThemedView> */}
-          </ThemedView>
+              {!!event?.images?.length && event.images.map((imgUrl, index) =>
+                <ThemedView style={styles.imageContainer} key={index}>
+                  <Image
+                    style={styles.imageBg}
+                    source={`${apiHost}${imgUrl}`}
+                  />
+                </ThemedView>
+              )}
+            </ThemedView>
+          </ScrollView>
         </ThemedView>
       </ScrollView>
     </SafeAreaView>
@@ -70,18 +78,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   imageBg: {
+    borderRadius: 5,
     height: '100%',
     width: '100%',
     objectFit: 'cover',
   },
   galleryContainer: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+    gap: 7,
+    marginBottom: 50,
   },
 });
