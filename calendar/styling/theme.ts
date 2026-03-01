@@ -8,7 +8,7 @@ import { Platform } from 'react-native';
 
 const appThemeColor = 'orange';
 const themePrimary = '#ffbb33';
-const themeLight = '#f9e79f';
+export const themeLight = '#f9e79f';
 const tintColorLight = '#ffaa00';
 const tintColorDark = '#ffbb33';
 
