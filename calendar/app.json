@@ -35,8 +35,7 @@
       "favicon": "./assets/img/logo.png"
     },
     "locales": {
-      "bg": "./translator/bg.json",
-      "en": "./translator/en.json"
+      "bg": "./translator/app-metadata/bg.json",
     },
     "plugins": [
       "expo-router",
