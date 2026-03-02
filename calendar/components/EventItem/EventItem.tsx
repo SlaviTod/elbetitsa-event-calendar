@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { Image } from 'expo-image';
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { ThemedView } from "../themed/themed-view";
-import { PublicEvent } from "@/types/dist";
+import { PublicEvent } from "@/types";
 import { Link } from "expo-router";
 import { commonStyles } from "@/styling/common";
 import { Colors } from "@/styling/theme";

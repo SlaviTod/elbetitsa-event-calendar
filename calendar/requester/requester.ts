@@ -1,4 +1,4 @@
-import { HTTPmethod, RequesterArgs } from "@/types/dist";
+import { HTTPmethod, RequesterArgs } from "@/types";
 
 const apiHost = process.env.EXPO_PUBLIC_API_URL;
 

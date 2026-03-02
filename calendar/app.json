@@ -28,7 +28,7 @@
         "backgroundImage": "./assets/img/logo.png",
         "monochromeImage": "./assets/img/logo.png"
       },
-      "package": "com.elbetitsa.calendar"
+      "package": "com.elbetitsa.elbetitsaeventcalendar"
     },
     "web": {
       "output": "static",
@@ -65,8 +65,7 @@
             ]
           }
         }
-      ],
-      "@react-native-community/datetimepicker"
+      ]
     ]
   }
 }

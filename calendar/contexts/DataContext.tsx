@@ -1,4 +1,4 @@
-import { PrivateEvent, PublicEvent } from "@/types/dist";
+import { PrivateEvent, PublicEvent } from "@/types";
 import { createContext, PropsWithChildren, useState } from "react";
 
 

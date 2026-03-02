@@ -1,5 +1,5 @@
 import { AuthContext } from "@/contexts/AuthContext";
-import { HTTPrequest, RequesterArgs } from "@/types/dist";
+import { HTTPrequest, RequesterArgs } from "@/types";
 import { useContext } from "react";
 
 

@@ -1,8 +1,11 @@
-import RNDateTimePicker, { AndroidNativeProps, DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+// import RNDateTimePicker, { AndroidNativeProps, DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { ThemedView } from '../themed/themed-view';
 
-type DateTimeProps = AndroidNativeProps & {
-  date?: Date;
+type DateTimeProps = {
+mode: string,
+display: string,
+date?: Date(),
+onChange: () => void,
 }
 
 export const DateTimePicker = ({
@@ -15,14 +18,14 @@ onChange,
   return (
     <>
       <ThemedView>
-        <RNDateTimePicker
+        {/* <RNDateTimePicker
           testID="dateTimePicker"
           value={date}
           mode={mode}
           is24Hour={true}
           display={display}
           onChange={onChange}
-        />
+        /> */}
       </ThemedView>
     </>
   );

@@ -9,7 +9,7 @@ import { ThemedInput } from '../themed/themed-input';
 import { commonStyles, containers, pickerStyles } from '@/styling/common';
 import { requester } from '@/requester/requester';
 import { AuthContext } from '@/contexts/AuthContext';
-import { ApiEndpoints, ElbetitsaApiCalls, Role, UpdateUserProfileRequest, UpdateUserResponse, Voice } from '@/types/dist';
+import { ApiEndpoints, ElbetitsaApiCalls, Role, UpdateUserProfileRequest, UpdateUserResponse, Voice } from '@/types';
 import { ThemedPicker } from '../themed/themed-picker';
 import { useRequesterArgs } from '@/hooks/useRequesterArgs';
 import { UserValidationSchema } from './userValidationSchema';

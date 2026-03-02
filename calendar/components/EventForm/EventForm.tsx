@@ -12,11 +12,11 @@ import { commonStyles, containers, pickerStyles } from '@/styling/common';
 
 
 import { ThemeButton } from '../buttons/ThemeButton/ThemeButton';
-import { PrivateEvent, PrivateEventRequest, RepetitiveEvents, Role } from '@/types/dist';
+import { PrivateEvent, PrivateEventRequest, PrivateEventType, RepetitiveEvents, Role } from '@/types';
 import { EventValidationSchema } from './eventValidationSchema';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedPicker } from '../themed/themed-picker';
-import { OneTimePrivateEvents } from '@/types/dist';
+import { OneTimePrivateEvents } from '@/types';
 import { AuthContext } from '@/contexts/AuthContext';
 import { MyInput } from '../themed/my-input';
 
@@ -25,8 +25,12 @@ import { RequiredStar } from '../ui/required-star';
 import { DateTime } from 'luxon';
 import { DateTimePicker } from '../pickers/DateTimePicker';
 
-const privateEventsType: string[] = [OneTimePrivateEvents.oneTimeRehearsal, OneTimePrivateEvents.publicEvent, OneTimePrivateEvents.trip, OneTimePrivateEvents.other];
-const privateEventsTypeForAdminAndConductor = [...privateEventsType, RepetitiveEvents.recurringRehearsal];
+const privateEventsType: PrivateEventType[] = [OneTimePrivateEvents.oneTimeRehearsal, OneTimePrivateEvents.publicEvent, OneTimePrivateEvents.trip, OneTimePrivateEvents.other];
+const privateEventsTypeForAdminAndConductor: PrivateEventType[] = [...privateEventsType, RepetitiveEvents.recurringRehearsal];
+
+const eventsWithHour: PrivateEventType[] = []
+
+// Broken AVD system path. Check your ANDROID_SDK_ROOT value [C:\Users\Megamaind\AppData\Local\Android\Sdk]!
 
 type EventProps = {
   event?: PrivateEvent;
@@ -44,6 +48,7 @@ const initialValues = {
   start: undefined,
   end: undefined,
   durationInMinutes: '',
+  asJson: '',
 }
 
 export const EventForm = ({

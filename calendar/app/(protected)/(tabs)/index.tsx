@@ -7,7 +7,7 @@ import { ThemedText } from '@/components/themed/themed-text';
 import { ThemedView } from '@/components/themed/themed-view';
 import { containers } from '@/styling/common';
 import { useRequesterArgs } from '@/hooks/useRequesterArgs';
-import { ApiEndpoints, ElbetitsaApiCalls, GetEventsResponse, PublicEvent } from '@/types/dist';
+import { ApiEndpoints, ElbetitsaApiCalls, GetEventsResponse, PublicEvent } from '@/types';
 import { requester } from '@/requester/requester';
 import { EventItem } from '@/components/EventItem/EventItem';
 import { DataContext } from '@/contexts/DataContext';

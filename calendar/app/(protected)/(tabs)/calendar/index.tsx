@@ -13,7 +13,7 @@ import { DataContext } from "@/contexts/DataContext";
 import { useColorScheme } from "@/hooks/use-color-scheme.web";
 import { calendarDarkTheme, calendarLightTheme } from "@/styling/calendarTheme";
 import { ThemeButton } from "@/components/buttons/ThemeButton/ThemeButton";
-import { Role } from "@/types/dist";
+import { Role } from "@/types";
 
 const authorizedForEventCreation: Role[] = [Role.admin, Role.conductor, Role.member];
 const authorizedForEventUpdate: Role[] = [Role.admin, Role.conductor, Role.member];
