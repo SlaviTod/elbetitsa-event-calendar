@@ -3,7 +3,6 @@ import { Colors, themeLight } from "./theme";
 
 
 export const calendarDarkTheme: Theme = {
-
   backgroundColor: 'transparent',
   calendarBackground: 'transparent',
   textSectionTitleColor: '#b6c1cd',
@@ -12,9 +11,9 @@ export const calendarDarkTheme: Theme = {
   selectedDayTextColor: '#ffffff',
   todayTextColor: Colors.dark.primary,
   dayTextColor: Colors.dark.text,
-  textDisabledColor: '#d9e1e8',
+  textDisabledColor: Colors.dark.text,
   dotColor: Colors.dark.primary,
-  selectedDotColor: Colors.dark.text,
+  selectedDotColor: Colors.dark.background,
   arrowColor: 'orange',
   disabledArrowColor: '#d9e1e8',
   monthTextColor: Colors.dark.icon,
@@ -32,7 +31,7 @@ export const calendarDarkTheme: Theme = {
 
 
 export const calendarLightTheme: Theme = {
-backgroundColor: 'transparent',
+  backgroundColor: 'transparent',
   calendarBackground: 'transparent',
   textSectionTitleColor: '#b6c1cd',
   textSectionTitleDisabledColor: '#d9e1e8',

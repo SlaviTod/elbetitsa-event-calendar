@@ -8,10 +8,8 @@ export enum OneTimePrivateEvents {
   oneTimeRehearsal = 'oneTimeRehearsal',  // extra rehearsal or one that replaces the canceled rehearsal
   canceledRehearsal = 'canceledRehearsal',
   trip = 'trip',
-  event = 'event', // public events 
-  concert = 'concert',
-  festival = 'festival',
-  competition = 'competition',
+  publicEvent = 'publicEvent',
+  other = 'other',
 }
 
 export type PrivateEventType = RepetitiveEvents | OneTimePrivateEvents;
