@@ -146,7 +146,7 @@ export const EventForm = ({
 
               <ThemedView style={[containers.inputWr, { borderColor: 'transparent', margin: 0 }, containers.titleWithIconButton]}>
                 {showRequired && <RequiredStar />}
-                <ThemedText>{DateTime.fromJSDate(start).toFormat('yyyy-MM-dd  HH:mm')}</ThemedText>
+                <ThemedText>{DateTime.fromJSDate(values.start).toFormat('yyyy-MM-dd  HH:mm')}</ThemedText>
 
                 {!startTime && <ThemeButton
                   buttonStyle={[commonStyles.themedButtonWithIcon, { minWidth: 100 }]}
@@ -167,7 +167,7 @@ export const EventForm = ({
                   display='spinner'
                   minuteInterval={30}
                   timeZoneName={'Europe/Sofia'}
-                  onChange={(e, date) => {setFieldValue('start', date); toggleSetStartAt()}}
+                  onChange={(e, date) => { setFieldValue('start', date); toggleSetStartAt()}}
                   onError={log}
                 />}
 

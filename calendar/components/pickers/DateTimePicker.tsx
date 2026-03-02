@@ -2,13 +2,13 @@ import RNDateTimePicker, { AndroidNativeProps, DateTimePickerAndroid } from '@re
 import { ThemedView } from '../themed/themed-view';
 
 type DateTimeProps = AndroidNativeProps & {
-  date?: string;
+  date?: Date;
 }
 
 export const DateTimePicker = ({
 mode,
 display,
-date,
+date = new Date(),
 onChange,
 }: DateTimeProps) => {
 
@@ -17,7 +17,7 @@ onChange,
       <ThemedView>
         <RNDateTimePicker
           testID="dateTimePicker"
-          value={new Date()}
+          value={date}
           mode={mode}
           is24Hour={true}
           display={display}

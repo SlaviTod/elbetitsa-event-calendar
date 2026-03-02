@@ -11,7 +11,6 @@
       "typedRoutes": true,
       "reactCompiler": true
     },
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -29,7 +28,6 @@
         "backgroundImage": "./assets/img/logo.png",
         "monochromeImage": "./assets/img/logo.png"
       },
-      "edgeToEdgeEnabled": true,
       "package": "com.elbetitsa.calendar"
     },
     "web": {
@@ -37,7 +35,8 @@
       "favicon": "./assets/img/logo.png"
     },
     "locales": {
-      "bg": "./translator/app-metadata/bg.json"
+      "bg": "./translator/bg.json",
+      "en": "./translator/en.json"
     },
     "plugins": [
       "expo-router",
