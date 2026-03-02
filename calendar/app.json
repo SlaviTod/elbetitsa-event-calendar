@@ -30,8 +30,6 @@
         "monochromeImage": "./assets/img/logo.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
-      "softwareKeyboardLayoutMode": "pan",
       "package": "com.elbetitsa.calendar"
     },
     "web": {
