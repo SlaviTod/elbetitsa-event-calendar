@@ -55,12 +55,12 @@ export const EventForm = ({
 
   const router = useRouter();
 
-  if (!date) {
-    Alert.alert(t('warning'), t('eventForm_msg'), [{
-      text: t('close')
-    }]);
-    router.back();
-  }
+  // if (!date) {
+  //   Alert.alert(t('warning'), t('eventForm_msg'), [{
+  //     text: t('close')
+  //   }]);
+  //   router.back();
+  // }
   const start = date ? DateTime.fromFormat(date, 'yyyy-MM-dd').toJSDate() : DateTime.now().toJSDate();
 
   const { user } = useContext(AuthContext);

@@ -44,7 +44,7 @@ export const EventValidationSchema = (t: any) => Yup.object().shape({
     end: Yup.date().required(t('err_date_r')),
     durationInMinutes: Yup.number()
         .min(validationRequirements.durationInMinutes.min, t('err_duration_min'))
-        .max(validationRequirements.durationInMinutes.max, `${t('err_duration_max.1')} ${validationRequirements.durationInMinutes.max} min ${t('err_duration_max.2')}`),
+        .max(validationRequirements.durationInMinutes.max, `${t('err_duration_max_1')} ${validationRequirements.durationInMinutes.max} min ${t('err_duration_max_2')}`),
     title: Yup.string()
         .required(t('err_name_r_required'))
         .min(validationRequirements.title.min, `${t('err_name_r_min')} ${validationRequirements.title.min} ${t('err_name_r_1')}`)

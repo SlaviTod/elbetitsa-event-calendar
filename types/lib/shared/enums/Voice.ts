@@ -1,5 +1,5 @@
 export enum Voice {
   soprano = 'Soprano',
-  mezzo = 'Mezzo-soprano',
+  mezzo = 'MezzoSoprano',
   alt = 'Contralto',
 }

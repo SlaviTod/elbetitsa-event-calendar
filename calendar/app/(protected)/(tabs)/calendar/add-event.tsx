@@ -14,7 +14,6 @@ export default function CreateEvent() {
   const { t } = useTranslation();
 
   const date: any = useLocalSearchParams();
-  console.log("🚀 ~ CreateEvent ~ date:", date)
 
   const router = useRouter();
 
