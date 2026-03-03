@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView } from "react-native";
 import { useNavigation, useRouter } from 'expo-router';
 import { useTranslation } from "react-i18next";
 import { Formik } from 'formik';
@@ -12,7 +12,7 @@ import { commonStyles, containers, pickerStyles } from '@/styling/common';
 
 
 import { ThemeButton } from '../buttons/ThemeButton/ThemeButton';
-import { PrivateEvent, PrivateEventRequest, PrivateEventType, RepetitiveEvents, Role } from '@/types';
+import { ApiEndpoints, ElbetitsaApiCalls, PrivateEvent, PrivateEventRequest, PrivateEventType, RepetitiveEvents, Role } from '@/types';
 import { EventValidationSchema } from './eventValidationSchema';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedPicker } from '../themed/themed-picker';
@@ -23,14 +23,16 @@ import { MyInput } from '../themed/my-input';
 import { ThemedSwitch } from '../themed/themed-switch';
 import { RequiredStar } from '../ui/required-star';
 import { DateTime } from 'luxon';
-import { DateTimePicker } from '../pickers/DateTimePicker';
+import { TimePicker } from '../pickers/TimePicker';
+import { useRequesterArgs } from '@/hooks/useRequesterArgs';
+import { requester } from '@/requester/requester';
+import { TheCalendar } from '../Calendar/ThemedCalendar';
 
 const privateEventsType: PrivateEventType[] = [OneTimePrivateEvents.oneTimeRehearsal, OneTimePrivateEvents.publicEvent, OneTimePrivateEvents.trip, OneTimePrivateEvents.other];
 const privateEventsTypeForAdminAndConductor: PrivateEventType[] = [...privateEventsType, RepetitiveEvents.recurringRehearsal];
 
-const eventsWithHour: PrivateEventType[] = []
+const daysOfTheWeek: string[] = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day0',];
 
-// Broken AVD system path. Check your ANDROID_SDK_ROOT value [C:\Users\Megamaind\AppData\Local\Android\Sdk]!
 
 type EventProps = {
   event?: PrivateEvent;
@@ -47,8 +49,8 @@ const initialValues = {
   mapLink: '',
   start: undefined,
   end: undefined,
-  durationInMinutes: '',
-  asJson: '',
+  durationInMinutes: 0,
+  asJson: '{}',
 }
 
 export const EventForm = ({
@@ -74,13 +76,35 @@ export const EventForm = ({
   const isConductor = user.role === Role.conductor;
 
 
-  const onSubmit = (values: any) => {
+
+  const requestArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.createEvent] });
+
+
+  const onSubmit = async (values: any) => {
+    console.log("🚀 ~ onSubmit ~ values:", values)
     // TODO requester + isSend PrivateEventRequest
+
+    setIsSend(true);
+    try {
+      const res: PrivateEventRequest = await requester({
+        ...requestArgs,
+        formData: values,
+      });
+
+
+    } catch (err: Error | unknown) {
+      // @ts-expect-error ​
+      Alert.alert(t('error'), `${t('event_msg_error')}. ${err instanceof Error ? t(err.message) : ''}. ${t('tryAgain')}`, [{
+        text: t('close')
+      }])
+      console.log('Log error', err);
+      setIsSend(false);
+    }
   }
 
   const [showRequired, setShowRequired] = useState(false);
   const [showAdditional, setShowAdditional] = useState(false);
-  const [startTime, setStartTime] = useState(false);
+  const [showEndTime, setShowEndTime] = useState(false);
 
   const [isSend, setIsSend] = useState(false);
 
@@ -93,21 +117,31 @@ export const EventForm = ({
     setShowAdditional((st) => !st);
   }
 
-  const handleStartAt = (date: Date | undefined) => {
-    console.log("🚀 ~ handleStartAt ~ date:", date);
-
+  const toggleSwitchEndTime = () => {
+    setShowEndTime((st) => !st);
   }
 
-  const toggleSetStartAt = () => {
-    console.log("🚀 ~ handleStartAtSelect ~ date: click");
-    setStartTime((st) => !st);
-  }
-  
-  const log = (data: any) => {
-    console.log("🚀 ~ log ~ date: click", data);
-    
+  const prepareEndOfTheEvent = (start: Date, duration?: number) => {
+    // let eventDuration = 0;
+    // if (duration) {
+    //   if (!isNaN(duration)) {
+    //     eventDuration = Number(duration);
+    //   }
+    // }
+    return duration ?
+      DateTime.fromJSDate(start).plus({ minute: duration }).toJSDate()
+      : DateTime.fromJSDate(start).endOf('day').toJSDate();
   }
 
+  const prepareAsJSONstartAt = (asJson: string, data: object) => {
+    const oldVal = JSON.parse(asJson);
+    return JSON.stringify({ ...oldVal, startAt: { ...oldVal?.startAt, ...data } });
+  }
+
+  const prepareAsJSON = (asJson: string, data: object) => {
+    const oldVal = JSON.parse(asJson);
+    return JSON.stringify({ ...oldVal, ...data });
+  }
 
   return (<SafeAreaView>
     <ThemedSwitch
@@ -129,11 +163,10 @@ export const EventForm = ({
           onSubmit={values => onSubmit(values)}
         >
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (<>
-            <ThemedView style={[containers.form, { marginTop: 0, marginBottom: 300 }]}>
+            <ThemedView style={[containers.form, { gap: 6, paddingHorizontal: 10, marginTop: 0, marginBottom: 300 }]}>
 
               <ThemedText style={commonStyles.label}>{t('eventType')}</ThemedText>
               <ThemedView style={[containers.inputWr, { paddingLeft: 10 }]}>
-                {/* TODO fix */}
                 {showRequired && <RequiredStar />}
 
                 <ThemedPicker
@@ -149,57 +182,86 @@ export const EventForm = ({
                 />
               </ThemedView>
 
-              <ThemedView style={[containers.inputWr, { borderColor: 'transparent', margin: 0 }, containers.titleWithIconButton]}>
+              <ThemedText style={commonStyles.label}>{values?.eventType === RepetitiveEvents.recurringRehearsal ?
+                t('eventStart_r') : t('eventStart')}</ThemedText>
+              <ThemedView style={[containers.inputWr, { borderColor: 'transparent', margin: 0 }, containers.flexCenter]}>
                 {showRequired && <RequiredStar />}
-                <ThemedText>{DateTime.fromJSDate(values.start).toFormat('yyyy-MM-dd  HH:mm')}</ThemedText>
-
-                {!startTime && <ThemeButton
-                  buttonStyle={[commonStyles.themedButtonWithIcon, { minWidth: 100 }]}
-                  handler={() => toggleSetStartAt()}
-                  disabled={isSend}
-                  iconName="time"
-                  iconSize={20}
-                  iconColor={commonStyles.themedButtonWithIcon.color}
-                  textStyle={commonStyles.default}
-                  buttonText={t('startAt')}
-                />}
-
-                {startTime && <DateTimePicker
-                  testID="dateTimePicker"
-                  value={start}
-                  mode={'time'}
-                  is24Hour={true}
-                  display='spinner'
-                  minuteInterval={30}
-                  timeZoneName={'Europe/Sofia'}
-                  onChange={(e, date) => { setFieldValue('start', date); toggleSetStartAt()}}
-                  onError={log}
-                />}
-
+                <ThemedText type="defaultSemiBold">
+                  {DateTime.fromJSDate(values.start).toFormat('yyyy-MM-dd  HH:mm')}</ThemedText>
               </ThemedView>
+
+              {(!values?.eventType || values?.eventType !== RepetitiveEvents.recurringRehearsal) && <>
+                <ThemedText style={commonStyles.label}>{t('set_event_start_time')}</ThemedText>
+                <ThemedView style={[containers.inputWr, { borderColor: 'transparent', margin: 0 }, containers.titleWithIconButton]}>
+                  <TimePicker
+                    value={values.start}
+                    onChange={(date) => { setFieldValue('start', date); setFieldValue('end', prepareEndOfTheEvent(date)) }}
+                  />
+                </ThemedView>
+              </>}
+
+              {(values?.eventType === RepetitiveEvents.recurringRehearsal) && <ThemedView>
+                <ThemedText style={commonStyles.label}>{t('set_event_end_time_r')}</ThemedText>
+
+                <Pressable style={[containers.inputWr, commonStyles.title, { margin: 0, padding: 0, height: 50, justifyContent: 'center' }]} onPress={() => toggleSwitchEndTime()}>
+                  <ThemedText type="defaultSemiBold" style={{ margin: 0, padding: 0, alignSelf: 'center' }}>
+                    {values.end ? DateTime.fromJSDate(values.end).toFormat('yyyy-MM-dd') : showEndTime}</ThemedText>
+                </Pressable>
+
+                {showEndTime && <ThemedView style={[containers.flexCenter]}>
+                  <TheCalendar
+                    hideDayNames={true}
+                    onDaySelect={(day) => { setFieldValue('end', new Date(day.timestamp)); setShowEndTime(false) }}
+                  />
+                </ThemedView>}
+              </ThemedView>}
+
+              {(values?.eventType === RepetitiveEvents.recurringRehearsal) && <>
+                <ThemedText style={commonStyles.label}>{t('set_event_start_time_r')}</ThemedText>
+                <ThemedView style={[containers.inputWr, { borderColor: 'transparent', margin: 0 }, containers.titleWithIconButton]}>
+                  <TimePicker
+                    value={values.start}
+                    returnDateObjUnit={true}
+                    onChangePart={(datePart) => { setFieldValue('asJson', prepareAsJSONstartAt(values.asJson, datePart)) }}
+                  />
+                </ThemedView>
+              </>}
 
               {!!values.durationInMinutes && <ThemedText style={commonStyles.label}>{t('durationInMinutes')}</ThemedText>}
               <MyInput
                 wrapperStyle={containers.inputWr}
                 style={commonStyles.input}
-                showRequired={showRequired}
-                isRequired={true}
                 placeholder={t('durationInMinutes')}
-                value={values.durationInMinutes}
+                value={values.durationInMinutes.toString()}
                 keyboardType="numeric"
                 onBlur={handleBlur('durationInMinutes')}
-                onChangeText={handleChange('durationInMinutes')}
+                onChangeText={(min) => { setFieldValue('durationInMinutes', Number(min)); setFieldValue('end', prepareEndOfTheEvent(values.start, Number(min))) }}
               />
               {errors.durationInMinutes && touched.durationInMinutes &&
                 <ThemedText type="error" >{errors.durationInMinutes}</ThemedText>}
+
+
+              {(values?.eventType === RepetitiveEvents.recurringRehearsal) && <><ThemedText style={commonStyles.label}>{t('dayOfWeek')}</ThemedText>
+                <ThemedView style={[containers.inputWr, { paddingLeft: 10 }]}>
+                  {showRequired && <RequiredStar />}
+                  <ThemedPicker
+                    selectedValue={''}
+                    optionsList={daysOfTheWeek}
+                    showChoose={values?.asJson ? false : true}
+                    style={pickerStyles.picker}
+                    mode={"dropdown"}
+                    label={t('dayOfWeek')}
+                    t={t}
+                    onValueChange={(val) => setFieldValue('asJson', prepareAsJSON(values.asJson, { dayOfTheWeek: val }))}
+                  />
+                </ThemedView>
+              </>}
 
 
               {!!values.title && <ThemedText style={commonStyles.label}>{t('title')}</ThemedText>}
               <MyInput
                 wrapperStyle={containers.inputWr}
                 style={commonStyles.input}
-                showRequired={showRequired}
-                isRequired={true}
                 placeholder={t('title')}
                 value={values.title}
                 onBlur={handleBlur('title')}
@@ -273,13 +335,7 @@ export const EventForm = ({
                 />
                 {errors.mapLink && touched.mapLink &&
                   <ThemedText type="error" >{errors.mapLink}</ThemedText>}
-
               </>}
-
-
-
-
-
 
 
               <ThemeButton

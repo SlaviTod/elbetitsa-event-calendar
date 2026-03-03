@@ -6,7 +6,7 @@ interface Timestamps {
 
 declare enum Voice {
     soprano = "Soprano",
-    mezzo = "Mezzo-soprano",
+    mezzo = "MezzoSoprano",
     alt = "Contralto"
 }
 
@@ -125,6 +125,10 @@ interface SeasonRehearsal extends PrivateEvent {
     eventType: RepetitiveEvents.recurringRehearsal;
     asJson: {
         dayOfTheWeek: string;
+        startAt: {
+            hour: number;
+            minute: number;
+        };
     };
 }
 interface Rehearsal extends PrivateEvent {

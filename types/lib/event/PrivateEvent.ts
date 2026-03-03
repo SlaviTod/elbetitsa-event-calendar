@@ -34,6 +34,10 @@ export interface SeasonRehearsal extends PrivateEvent {
   eventType: RepetitiveEvents.recurringRehearsal,
   asJson: {
     dayOfTheWeek: string;
+    startAt: {
+      hour: number,
+      minute: number,
+    }
   },
 }
 

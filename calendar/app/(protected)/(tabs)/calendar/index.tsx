@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { Alert } from "react-native";
 import { Redirect, useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-import { Calendar, DateData, LocaleConfig } from 'react-native-calendars';
 import { DateTime, Interval } from 'luxon';
 
 import { AuthContext } from "@/contexts/AuthContext";
@@ -14,36 +13,13 @@ import { useColorScheme } from "@/hooks/use-color-scheme.web";
 import { calendarDarkTheme, calendarLightTheme } from "@/styling/calendarTheme";
 import { ThemeButton } from "@/components/buttons/ThemeButton/ThemeButton";
 import { Role } from "@/types";
+import { TheCalendar } from "@/components/Calendar/ThemedCalendar";
+import { DateData } from "react-native-calendars";
 
 const authorizedForEventCreation: Role[] = [Role.admin, Role.conductor, Role.member];
 const authorizedForEventUpdate: Role[] = [Role.admin, Role.conductor, Role.member];
 const authorizedForEventDeletion: Role[] = [Role.admin, Role.conductor];
 
-LocaleConfig.locales['bg'] = {
-  monthNames: [
-    'Януари',
-    'Февруари',
-    'Март',
-    'Април',
-    'Май',
-    'Юни',
-    'Юли',
-    'Август',
-    'Септември',
-    'Октомври',
-    'Ноември',
-    'Декември'
-  ],
-  monthNamesShort: ['Ян.', 'Февр.', 'Март', 'Апр.', 'Май', 'Юни', 'Юли', 'Авг.', 'Септ.', 'Окт.', 'Ное.', 'Дек.'],
-  dayNames: ['неделя', 'понеделник', 'вторник', 'сряда', 'четвъртък', 'петък', 'събота'],
-  dayNamesShort: ['нд', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'],
-  today: "Днес"
-};
-LocaleConfig.defaultLocale = 'bg';
-
-interface Action {
-
-}
 
 export default function CalendarScreen() {
 
@@ -81,12 +57,28 @@ export default function CalendarScreen() {
       }]);
     }
     setSelected(day);
-    // {"dateString": "2026-03-11", "day": 11, "month": 3, "timestamp": 1773187200000, "year": 2026}
+    //   // {"dateString": "2026-03-11", "day": 11, "month": 3, "timestamp": 1773187200000, "year": 2026}
   }
 
   return (
     <SafeAreaView style={containers.mainContainer}>
+
       <ThemeButton
+        buttonStyle={[commonStyles.themedButtonWithIcon]}
+        handler={() => router.navigate({ pathname: '/(protected)/(tabs)/calendar/add-event', params: { date: selected.dateString } })}
+        iconName="add"
+        iconSize={26}
+        iconColor={commonStyles.themedButtonWithIcon.color}
+        textStyle={commonStyles.subtitle}
+        buttonText={t('add_event')}
+      />
+
+      <TheCalendar
+
+        onDaySelect={handleOnDayPress}
+      />
+
+      {/* <ThemeButton
         buttonStyle={[commonStyles.themedButtonWithIcon]}
         handler={() => router.navigate({pathname: '/(protected)/(tabs)/calendar/add-event', params: { date: selected.dateString}})}
         iconName="add"
@@ -113,7 +105,7 @@ export default function CalendarScreen() {
         onPressArrowRight={(goToNextMonth) => {
           console.log('onPressArrowRight'); goToNextMonth();
         }}
-      />
+      /> */}
 
     </SafeAreaView>
   );

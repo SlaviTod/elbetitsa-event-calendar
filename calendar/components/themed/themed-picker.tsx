@@ -1,6 +1,7 @@
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Picker, PickerProps } from '@react-native-picker/picker';
 import { TFunction } from 'i18next';
+import { StyleProp, TextStyle } from 'react-native';
 
 export type ThemedInputProps = PickerProps & {
   lightColor?: string;
@@ -9,6 +10,7 @@ export type ThemedInputProps = PickerProps & {
   optionsList: string[],
   label?: string;
   showChoose?: boolean,
+  itemStyle?: StyleProp<TextStyle>,
   handleValueChange?: () => void,
   t?: TFunction<"translation", undefined>,
 };
@@ -23,6 +25,7 @@ export function ThemedPicker({
   showChoose = false,
   lightColor,
   darkColor,
+  itemStyle,
   handleValueChange,
   t,
   ...otherProps }: ThemedInputProps) {
@@ -33,13 +36,14 @@ export function ThemedPicker({
   return (<Picker
     selectedValue={selectedValue}
     mode={mode}
+    style={style}
     onValueChange={(val) => handleValueChange}
     {...otherProps}
     dropdownIconColor={backgroundColor}
     dropdownIconRippleColor={backgroundColor}
   >
-    {showChoose && <Picker.Item label={label} value={''} style={{ color, backgroundColor }} />}
+    {showChoose && <Picker.Item label={label} value={''} style={[{ color, backgroundColor }, style]} />}
     {/*  @ts-expect-error  */}
-    {optionsList.map((el) => <Picker.Item key={el} label={t ? t(el) as string : el} value={el} style={{ color, backgroundColor }} />)}
+    {optionsList.map((el) => <Picker.Item key={el} label={t ? t(el) as string : el} value={el} style={[{ color, backgroundColor }, itemStyle]} />)}
   </Picker>);
 }
