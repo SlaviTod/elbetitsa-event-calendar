@@ -27,23 +27,13 @@ export interface PrivateEvent {
   end: string;
   durationInMinutes: number;
   timeZone: string;
-  asJson: object;
+  asJson: AsJson;
 }
 
-export interface SeasonRehearsal extends PrivateEvent {
-  eventType: RepetitiveEvents.recurringRehearsal,
-  asJson: {
-    dayOfTheWeek: string;
-    startAt: {
-      hour: number,
-      minute: number,
-    }
-  },
-}
-
-export interface Rehearsal extends PrivateEvent {
-  eventType: OneTimePrivateEvents.rehearsal,
-  asJson: {
-    place: string;
-  },
+export interface AsJson {
+  dayOfTheWeek?: string;
+  startAt?: {
+    hour: number,
+    minute: number,
+  }
 }

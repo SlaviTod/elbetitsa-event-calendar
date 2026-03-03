@@ -13,7 +13,7 @@ export default function CreateEvent() {
 
   const { t } = useTranslation();
 
-  const date: any = useLocalSearchParams();
+  const params: any = useLocalSearchParams();
 
   const router = useRouter();
 
@@ -26,7 +26,7 @@ export default function CreateEvent() {
         <IconButton name="return-up-back" size={26} onPressHandler={() => router.back()} />
       </ThemedView>
 
-      <EventForm date={date.date}/>
+      <EventForm date={params.date}/>
     </SafeAreaView>
   );
 }

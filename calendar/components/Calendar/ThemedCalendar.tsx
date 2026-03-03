@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { Alert } from "react-native";
 import { Redirect } from "expo-router";
 import { useTranslation } from "react-i18next";
@@ -56,12 +56,16 @@ LocaleConfig.locales['bg'] = {
 
 type TCalendarProps = CalendarProps & ContextProp & {
   onDaySelect: (day: DateData) => void,
+  handleMonthChange?: (day: DateData) => void,
 }
 
 
 export const TheCalendar = ({
   hideDayNames = false,
+
+  handleMonthChange = () => { },
   onDaySelect,
+  ...otherProps
 }: TCalendarProps) => {
 
   const { isLoggedIn, user } = useContext(AuthContext);
@@ -96,6 +100,7 @@ export const TheCalendar = ({
     <SafeAreaView style={[containers.flexCenter, { margin: 0, padding: 0, }]}>
 
       <Calendar
+        {...otherProps}
         hideDayNames={hideDayNames}
         style={[{ backgroundColor: 'transparent' }, { margin: 0, padding: 0, }]}
         theme={colorScheme === 'dark' ? calendarDarkTheme : calendarLightTheme}
@@ -105,13 +110,14 @@ export const TheCalendar = ({
 
         onDayPress={(day) => { handleOnDayPress(day); console.log('onDayPress', day) }}
         onDayLongPress={(day) => console.log('onDayLongPress', day)}
-        onMonthChange={(date) => console.log('onMonthChange', date)}
+        onMonthChange={(date) => { console.log('onMonthChange', date); handleMonthChange(date) }}
         onPressArrowLeft={(goToPreviousMonth) => {
           console.log('onPressArrowLeft'); goToPreviousMonth();
         }}
         onPressArrowRight={(goToNextMonth) => {
           console.log('onPressArrowRight'); goToNextMonth();
         }}
+
       />
 
     </SafeAreaView>

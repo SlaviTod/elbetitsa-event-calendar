@@ -18,7 +18,8 @@ export interface PrivateEventResponse {
 }
 
 export interface GetPrivateEventsResponse {
-  events: PrivateEvent;
+  events: PrivateEvent[];
+  recurring: PrivateEvent[];
 }
 
 export interface GetRecurringEventsResponse {

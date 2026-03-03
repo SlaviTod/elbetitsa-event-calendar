@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ThemedView } from "../themed/themed-view";
 import { ThemedPicker } from "../themed/themed-picker";
 import { containers, pickerStyles } from "@/styling/common";
@@ -10,18 +9,22 @@ import { useTranslation } from "react-i18next";
 const hoursList: string[] = ['17', '18', '19', '20', '21', '9', '10', '11', '12', '13', '14', '15', '16'];
 const minutesList: string[] = ['00', '15', '30', '45'];
 
-
+// TODO 
 type TimePickerProps = {
   value: Date,
   returnDateObjUnit?: boolean;
   is24Hour?: boolean,
   minuteInterval?: number,
+  startHour?: string | number,
+  startMinutes?: string | number,
   onChange?: (date: Date) => void,
   onChangePart?: (date: DateObjectUnits) => void,
 }
 
 
 export const TimePicker = ({
+  startHour,
+  startMinutes,
   value,
   returnDateObjUnit = false,
   onChange = () => { },
@@ -48,13 +51,13 @@ export const TimePicker = ({
       <ThemedView style={[containers.titleWithIconButton]}>
         <ThemedView style={containers.timeInputWr}>
           <ThemedPicker
-            selectedValue={18}
+            selectedValue={startHour ? startHour : ''}
             optionsList={hoursList}
             style={containers.timeInputWr}
             itemStyle={pickerStyles.timePicker}
             mode={"dropdown"}
-            showChoose={true}
-            label="..."
+            showChoose={startHour ? false : true}
+            label={startHour ? undefined : "..."}
             onValueChange={(val) => handleHoursChange(val as string)}
           />
         </ThemedView>
@@ -64,13 +67,13 @@ export const TimePicker = ({
       <ThemedView style={[containers.titleWithIconButton]}>
         <ThemedView style={containers.timeInputWr}>
           <ThemedPicker
-            selectedValue={0}
+            selectedValue={startMinutes ? startMinutes : ''}
             optionsList={minutesList}
             style={containers.timeInputWr}
             itemStyle={pickerStyles.timePicker}
             mode={"dropdown"}
-            showChoose={true}
-            label="..."
+            showChoose={startMinutes ? false : true}
+            label={"..."}
             onValueChange={(val) => handleMinutesChange(val as string)}
           />
         </ThemedView>

@@ -1,6 +1,7 @@
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { Picker, PickerProps } from '@react-native-picker/picker';
 import { TFunction } from 'i18next';
+import { Ref } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 
 export type ThemedInputProps = PickerProps & {
@@ -10,6 +11,7 @@ export type ThemedInputProps = PickerProps & {
   optionsList: string[],
   label?: string;
   showChoose?: boolean,
+  reference?: Ref<Picker<any>>;
   itemStyle?: StyleProp<TextStyle>,
   handleValueChange?: () => void,
   t?: TFunction<"translation", undefined>,
@@ -26,6 +28,7 @@ export function ThemedPicker({
   lightColor,
   darkColor,
   itemStyle,
+  reference,
   handleValueChange,
   t,
   ...otherProps }: ThemedInputProps) {
@@ -39,6 +42,7 @@ export function ThemedPicker({
     style={style}
     onValueChange={(val) => handleValueChange}
     {...otherProps}
+    ref={reference}
     dropdownIconColor={backgroundColor}
     dropdownIconRippleColor={backgroundColor}
   >

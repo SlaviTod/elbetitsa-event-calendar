@@ -49,10 +49,12 @@ export const EventValidationSchema = (t: any) => Yup.object().shape({
         // .required(t('err_name_r_required'))
         .min(validationRequirements.title.min, `${t('err_name_r_min')} ${validationRequirements.title.min} ${t('err_name_r_1')}`)
         .max(validationRequirements.title.max, `${t('err_name_r_max')} ${validationRequirements.title.max} ${t('err_name_r_1')}`)
-        .matches(validationRequirements.title.match, `${t('err_name_r_match')} ${validationRequirements.title.matchMsg}`),
+        .matches(validationRequirements.title.match, `${t('err_name_r_match')} ${validationRequirements.title.matchMsg}`)
+        .nullable(),
     description: Yup.string()
         // .required(t('err_description_r_required'))
-        .max(validationRequirements.description.max, `${t('err_description_r_max')} ${validationRequirements.description.max} ${t('err_name_r_1')}`),
+        .max(validationRequirements.description.max, `${t('err_description_r_max')} ${validationRequirements.description.max} ${t('err_name_r_1')}`)
+        .nullable(),
     address: Yup.string()
         .max(validationRequirements.address.max, `${t('err_address_r_max')} ${validationRequirements.address.max} ${t('err_name_r_1')}`)
         .matches(validationRequirements.address.match, `${t('err_address_r_match')} ${validationRequirements.address.matchMsg}`)

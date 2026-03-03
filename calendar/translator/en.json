@@ -1,4 +1,6 @@
   {
+    "set_attendance": "Mark attendance",
+    "delete_event": "Delete event",
     "h": "h",
     "m": "m",
     "endTimeSwitch_true": "Скрий календара",
@@ -246,7 +248,7 @@
     "event_msg_error": "The event was not added",
     "event_update_msg_error": "The event was not updated",
     "lang_change_msg_warning": "You have change the language. The changes will not be saved",
-    "day0": "Sunday",
+    "day7": "Sunday",
     "day1": "Monday",
     "day2": "Tuesday",
     "day3": "Wednesday",

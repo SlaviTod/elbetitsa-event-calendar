@@ -119,22 +119,13 @@ interface PrivateEvent {
     end: string;
     durationInMinutes: number;
     timeZone: string;
-    asJson: object;
+    asJson: AsJson;
 }
-interface SeasonRehearsal extends PrivateEvent {
-    eventType: RepetitiveEvents.recurringRehearsal;
-    asJson: {
-        dayOfTheWeek: string;
-        startAt: {
-            hour: number;
-            minute: number;
-        };
-    };
-}
-interface Rehearsal extends PrivateEvent {
-    eventType: OneTimePrivateEvents.rehearsal;
-    asJson: {
-        place: string;
+interface AsJson {
+    dayOfTheWeek?: string;
+    startAt?: {
+        hour: number;
+        minute: number;
     };
 }
 
@@ -154,7 +145,8 @@ interface PrivateEventResponse {
     event: PrivateEvent;
 }
 interface GetPrivateEventsResponse {
-    events: PrivateEvent;
+    events: PrivateEvent[];
+    recurring: PrivateEvent[];
 }
 interface GetRecurringEventsResponse {
     recurring: PrivateEvent;
@@ -230,4 +222,4 @@ type QueryObject = {
     [K: string]: number | string;
 };
 
-export { type ApiCalls, ApiEndpoints, ApiRouts, type CalendarEventDetails, type ChangePassForm, type ChangePassRequest, ElbetitsaApiCalls, type FormDataObjectType, type GetEventResponse, type GetEventsResponse, type GetPrivateEventsResponse, type GetRecurringEventsResponse, HTTPmethod, type HTTPrequest, type Language, type LoginRequest, type LoginResponse, OneTimePrivateEvents, type PrivateEvent, type PrivateEventRequest, type PrivateEventResponse, type PrivateEventType, type PublicEvent, PublicEventType, type Rehearsal, RepetitiveEvents, type RequesterArgs, Role, type SeasonRehearsal, type Timestamps, type UpdateUserProfileRequest, type UpdateUserResponse, type User, Voice };
+export { type ApiCalls, ApiEndpoints, ApiRouts, type AsJson, type CalendarEventDetails, type ChangePassForm, type ChangePassRequest, ElbetitsaApiCalls, type FormDataObjectType, type GetEventResponse, type GetEventsResponse, type GetPrivateEventsResponse, type GetRecurringEventsResponse, HTTPmethod, type HTTPrequest, type Language, type LoginRequest, type LoginResponse, OneTimePrivateEvents, type PrivateEvent, type PrivateEventRequest, type PrivateEventResponse, type PrivateEventType, type PublicEvent, PublicEventType, RepetitiveEvents, type RequesterArgs, Role, type Timestamps, type UpdateUserProfileRequest, type UpdateUserResponse, type User, Voice };

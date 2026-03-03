@@ -1,13 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView } from "react-native";
-import { useNavigation, useRouter } from 'expo-router';
+import { Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, useColorScheme } from "react-native";
+import { useRouter } from 'expo-router';
 import { useTranslation } from "react-i18next";
 import { Formik } from 'formik';
 
 import { ThemedView } from "../themed/themed-view";
 import { ThemedText } from "../themed/themed-text";
-import { ThemedInput } from '../themed/themed-input';
-import { IconButton } from '../buttons/IconButton';
 import { commonStyles, containers, pickerStyles } from '@/styling/common';
 
 
@@ -26,12 +24,13 @@ import { DateTime } from 'luxon';
 import { TimePicker } from '../pickers/TimePicker';
 import { useRequesterArgs } from '@/hooks/useRequesterArgs';
 import { requester } from '@/requester/requester';
-import { TheCalendar } from '../Calendar/ThemedCalendar';
+import { Calendar } from 'react-native-calendars';
+import { calendarDarkTheme, calendarLightTheme } from '@/styling/calendarTheme';
 
 const privateEventsType: PrivateEventType[] = [OneTimePrivateEvents.oneTimeRehearsal, OneTimePrivateEvents.publicEvent, OneTimePrivateEvents.trip, OneTimePrivateEvents.other];
 const privateEventsTypeForAdminAndConductor: PrivateEventType[] = [...privateEventsType, RepetitiveEvents.recurringRehearsal];
 
-const daysOfTheWeek: string[] = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day0',];
+const daysOfTheWeek: string[] = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7',];
 
 
 type EventProps = {
@@ -39,26 +38,13 @@ type EventProps = {
   date?: string;
 }
 
-const initialValues = {
-  eventType: '',
-  title: '',
-  description: '',
-  address: '',
-  city: '',
-  country: '',
-  mapLink: '',
-  start: undefined,
-  end: undefined,
-  durationInMinutes: 0,
-  asJson: '{}',
-}
-
 export const EventForm = ({
   event,
   date,
 }: EventProps) => {
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const colorScheme = useColorScheme();
 
   const router = useRouter();
 
@@ -68,13 +54,12 @@ export const EventForm = ({
   //   }]);
   //   router.back();
   // }
-  const start = date ? DateTime.fromFormat(date, 'yyyy-MM-dd').toJSDate() : DateTime.now().toJSDate();
+  const start = !event && date ? DateTime.fromFormat(date, 'yyyy-MM-dd').toJSDate() : DateTime.now().toJSDate();
 
   const { user } = useContext(AuthContext);
 
   const isAdmin = user.role === Role.admin;
   const isConductor = user.role === Role.conductor;
-
 
 
   const requestArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.createEvent] });
@@ -91,7 +76,10 @@ export const EventForm = ({
         formData: values,
       });
 
-
+      Alert.alert(t('warning'), `${t('event_msg_success')}`, [{
+        text: t('close')
+      }])
+      router.back();
     } catch (err: Error | unknown) {
       // @ts-expect-error ​
       Alert.alert(t('error'), `${t('event_msg_error')}. ${err instanceof Error ? t(err.message) : ''}. ${t('tryAgain')}`, [{
@@ -133,14 +121,18 @@ export const EventForm = ({
       : DateTime.fromJSDate(start).endOf('day').toJSDate();
   }
 
-  const prepareAsJSONstartAt = (asJson: string, data: object) => {
-    const oldVal = JSON.parse(asJson);
-    return JSON.stringify({ ...oldVal, startAt: { ...oldVal?.startAt, ...data } });
-  }
-
-  const prepareAsJSON = (asJson: string, data: object) => {
-    const oldVal = JSON.parse(asJson);
-    return JSON.stringify({ ...oldVal, ...data });
+  const initFormData = {
+    eventType: event?.eventType || '',
+    title: event?.title || null,
+    description: event?.description || null,
+    address: event?.address || null,
+    city: event?.city || null,
+    country: event?.country || null,
+    mapLink: event?.mapLink || '',
+    start: event?.start ? DateTime.fromISO(event.start).toJSDate() : start,
+    end: event?.end ? DateTime.fromISO(event.end).toJSDate() : undefined,
+    durationInMinutes: event?.durationInMinutes || 0,
+    asJson: event?.asJson || {},
   }
 
   return (<SafeAreaView>
@@ -158,7 +150,7 @@ export const EventForm = ({
     <ScrollView>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
         <Formik
-          initialValues={{ ...initialValues, start }}
+          initialValues={initFormData}
           validationSchema={EventValidationSchema(t)}
           onSubmit={values => onSubmit(values)}
         >
@@ -200,29 +192,16 @@ export const EventForm = ({
                 </ThemedView>
               </>}
 
-              {(values?.eventType === RepetitiveEvents.recurringRehearsal) && <ThemedView>
-                <ThemedText style={commonStyles.label}>{t('set_event_end_time_r')}</ThemedText>
-
-                <Pressable style={[containers.inputWr, commonStyles.title, { margin: 0, padding: 0, height: 50, justifyContent: 'center' }]} onPress={() => toggleSwitchEndTime()}>
-                  <ThemedText type="defaultSemiBold" style={{ margin: 0, padding: 0, alignSelf: 'center' }}>
-                    {values.end ? DateTime.fromJSDate(values.end).toFormat('yyyy-MM-dd') : showEndTime}</ThemedText>
-                </Pressable>
-
-                {showEndTime && <ThemedView style={[containers.flexCenter]}>
-                  <TheCalendar
-                    hideDayNames={true}
-                    onDaySelect={(day) => { setFieldValue('end', new Date(day.timestamp)); setShowEndTime(false) }}
-                  />
-                </ThemedView>}
-              </ThemedView>}
 
               {(values?.eventType === RepetitiveEvents.recurringRehearsal) && <>
                 <ThemedText style={commonStyles.label}>{t('set_event_start_time_r')}</ThemedText>
                 <ThemedView style={[containers.inputWr, { borderColor: 'transparent', margin: 0 }, containers.titleWithIconButton]}>
                   <TimePicker
+                    startHour={values.asJson?.startAt?.hour || ''}
+                    startMinutes={values.asJson?.startAt?.minute || ''}
                     value={values.start}
                     returnDateObjUnit={true}
-                    onChangePart={(datePart) => { setFieldValue('asJson', prepareAsJSONstartAt(values.asJson, datePart)) }}
+                    onChangePart={(datePart) => { setFieldValue('asJson', { ...values.asJson, startAt: { ...values.asJson?.startAt, ...datePart } }) }}
                   />
                 </ThemedView>
               </>}
@@ -235,35 +214,68 @@ export const EventForm = ({
                 value={values.durationInMinutes.toString()}
                 keyboardType="numeric"
                 onBlur={handleBlur('durationInMinutes')}
-                onChangeText={(min) => { setFieldValue('durationInMinutes', Number(min)); setFieldValue('end', prepareEndOfTheEvent(values.start, Number(min))) }}
+                onChangeText={(min) => {
+                  setFieldValue('durationInMinutes', Number(min));
+                  setFieldValue('end', prepareEndOfTheEvent(values.start, Number(min)))
+                }}
               />
               {errors.durationInMinutes && touched.durationInMinutes &&
                 <ThemedText type="error" >{errors.durationInMinutes}</ThemedText>}
 
 
-              {(values?.eventType === RepetitiveEvents.recurringRehearsal) && <><ThemedText style={commonStyles.label}>{t('dayOfWeek')}</ThemedText>
+              {(values?.eventType === RepetitiveEvents.recurringRehearsal) && <>
+
+                <ThemedText style={commonStyles.label}>{t('dayOfWeek')}</ThemedText>
                 <ThemedView style={[containers.inputWr, { paddingLeft: 10 }]}>
                   {showRequired && <RequiredStar />}
                   <ThemedPicker
-                    selectedValue={''}
+                    selectedValue={values.asJson?.dayOfTheWeek}
                     optionsList={daysOfTheWeek}
-                    showChoose={values?.asJson ? false : true}
+                    showChoose={values.asJson ? false : true}
                     style={pickerStyles.picker}
                     mode={"dropdown"}
                     label={t('dayOfWeek')}
                     t={t}
-                    onValueChange={(val) => setFieldValue('asJson', prepareAsJSON(values.asJson, { dayOfTheWeek: val }))}
+                    onValueChange={(val) => setFieldValue('asJson', { ...values.asJson, dayOfTheWeek: val.toString() })}
                   />
                 </ThemedView>
-              </>}
 
+
+                <ThemedView>
+                  <ThemedText style={commonStyles.label}>{t('set_event_end_time_r')}</ThemedText>
+
+                  <Pressable style={[containers.inputWr, commonStyles.title,
+                  { margin: 0, padding: 0, height: 50, justifyContent: 'center' }]} onPress={() => toggleSwitchEndTime()}>
+                    <ThemedText type="defaultSemiBold" style={{ margin: 0, padding: 0, alignSelf: 'center' }}>
+                      {values.end ? DateTime.fromJSDate(values.end).toFormat('yyyy-MM-dd') : showEndTime}</ThemedText>
+                  </Pressable>
+
+                  {showEndTime && <ThemedView style={[containers.flexCenter]}>
+                    <Calendar
+
+                      hideDayNames={true}
+                      style={[{ backgroundColor: 'transparent' }, { margin: 0, padding: 0, }]}
+                      theme={colorScheme === 'dark' ? calendarDarkTheme : calendarLightTheme}
+                      firstDay={i18n.language === 'bg' ? 1 : 0}
+                      hideExtraDays={true}
+                      disableAllTouchEventsForDisabledDays={true}
+
+                      onDayPress={(day) => { setFieldValue('end', new Date(day.timestamp)); setShowEndTime(false) }}
+
+                    />
+
+                  </ThemedView>}
+                </ThemedView>
+
+
+              </>}
 
               {!!values.title && <ThemedText style={commonStyles.label}>{t('title')}</ThemedText>}
               <MyInput
                 wrapperStyle={containers.inputWr}
                 style={commonStyles.input}
                 placeholder={t('title')}
-                value={values.title}
+                value={values.title || ''}
                 onBlur={handleBlur('title')}
                 onChangeText={handleChange('title')}
               />
@@ -273,9 +285,11 @@ export const EventForm = ({
               {!!values.description && <ThemedText style={commonStyles.label}>{t('description')}</ThemedText>}
               <MyInput
                 wrapperStyle={containers.inputWr}
+                // @ts-expect-error
                 style={[commonStyles.input, (values.description?.length > 20 ? { height: 150 } : {})]}
                 placeholder={t('description')}
-                value={values.description}
+                value={values.description || ''}
+                // @ts-expect-error
                 multiline={values.description?.length > 20}
                 onBlur={handleBlur('description')}
                 onChangeText={handleChange('description')}
@@ -290,7 +304,7 @@ export const EventForm = ({
                   wrapperStyle={containers.inputWr}
                   style={commonStyles.input}
                   placeholder={t('address')}
-                  value={values.address}
+                  value={values.address || ''}
                   onBlur={handleBlur('address')}
                   onChangeText={handleChange('address')}
                 />
@@ -303,7 +317,7 @@ export const EventForm = ({
                   wrapperStyle={containers.inputWr}
                   style={commonStyles.input}
                   placeholder={t('city')}
-                  value={values.city}
+                  value={values.city || ''}
                   onBlur={handleBlur('city')}
                   onChangeText={handleChange('city')}
                 />
@@ -316,7 +330,7 @@ export const EventForm = ({
                   wrapperStyle={containers.inputWr}
                   style={commonStyles.input}
                   placeholder={t('country')}
-                  value={values.country}
+                  value={values.country || ''}
                   onBlur={handleBlur('country')}
                   onChangeText={handleChange('country')}
                 />
