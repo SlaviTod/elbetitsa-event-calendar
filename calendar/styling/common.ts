@@ -46,6 +46,7 @@ export const containers = StyleSheet.create({
   },
   titleWithIconButton: {
     flexDirection: "row",
+    alignItems: 'center',
     justifyContent: "space-between",
   },
   form: {
@@ -64,9 +65,19 @@ export const containers = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
   },
+  timeInputWr: {
+    width: 90,
+    marginHorizontal: 12,
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderColor: 'orange',
+    borderStyle: 'solid',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
   passContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 10,
     paddingHorizontal: 16,
@@ -98,6 +109,10 @@ export const commonStyles = StyleSheet.create({
     margin: 12,
     padding: 10,
     minWidth: 190,
+  },
+  label: {
+    alignSelf: 'flex-start',
+    marginTop: 10,
   },
   input: {
     fontSize: 16,
@@ -168,6 +183,10 @@ export const pickerStyles = StyleSheet.create({
     fontSize: 16,
     height: 50,
     marginLeft: 10,
+  },
+  timePicker: {
+    width: '100%',
+    height: 16,
   }
 })
 

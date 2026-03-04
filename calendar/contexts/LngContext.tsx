@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react"
-import { Language } from "@/types/dist"
+import { Language } from "@/types"
 import { LANGUAGES } from "@/constants/languages";
 
 import { useTranslation } from "react-i18next";

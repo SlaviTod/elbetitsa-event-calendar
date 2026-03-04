@@ -1,25 +1,22 @@
-import { PrivateEvent, PublicEvent } from "@/types/dist";
+import { PrivateEvent, PublicEvent } from "@/types";
 import { createContext, PropsWithChildren, useState } from "react";
 
 
 export interface EventsState {
   events: PublicEvent[];
-  private: PrivateEvent[];
+  privateEvents: PrivateEvent[];
   recurring: PrivateEvent[];
 }
 
-export type DataState = {
-  data: EventsState,
+export interface DataState extends EventsState {
   setData: (data: Partial<EventsState>) => void,
-  setPublicData: (data: Omit<EventsState, 'private' | 'recurring'>) => void,
+  setPublicData: (data: PublicEvent[]) => void,
 }
 
 export const DataContext = createContext<DataState>({
-  data: {
     events: [],
-    private: [],
+    privateEvents: [],
     recurring: [],
-  },
   setData: () => { },
   setPublicData: () => { },
 })
@@ -27,23 +24,22 @@ export const DataContext = createContext<DataState>({
 
 export const DataProvider = ({ children }: PropsWithChildren) => {
 
-  const [data, setEvents] = useState({
-    events: [],
-    private: [],
-    recurring: [],
-  } as EventsState);
-
+  const [events, setEvents] = useState([] as PublicEvent[]);
+  const [privateEvents, setPrivateEvents] = useState([] as PrivateEvent[]);
+  const [recurring, setRecurring] = useState([] as PrivateEvent[]);
+  
 
   const setData = (data: Partial<EventsState>) => {
-    setEvents((st) => ({ ...st, ...data }))
+    if (data?.privateEvents) setPrivateEvents(data.privateEvents);
+    if (data?.recurring) setRecurring(data.recurring);
   }
 
-  const setPublicData = (data: Omit<EventsState, 'private' | 'recurring'>) => {
-    setEvents((st) => ({ ...st, events: [...st.events, ...data.events] }))
+  const setPublicData = (events: PublicEvent[]) => {
+    setEvents((st) => ([ ...st, ...events ]));
   }
 
 
-  return (<DataContext.Provider value={{ data, setData, setPublicData }}>
+  return (<DataContext.Provider value={{ events, privateEvents, recurring, setData, setPublicData }}>
     {children}
   </DataContext.Provider>);
 }

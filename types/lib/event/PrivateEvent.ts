@@ -8,10 +8,8 @@ export enum OneTimePrivateEvents {
   oneTimeRehearsal = 'oneTimeRehearsal',  // extra rehearsal or one that replaces the canceled rehearsal
   canceledRehearsal = 'canceledRehearsal',
   trip = 'trip',
-  event = 'event', // public events 
-  concert = 'concert',
-  festival = 'festival',
-  competition = 'competition',
+  publicEvent = 'publicEvent',
+  other = 'other',
 }
 
 export type PrivateEventType = RepetitiveEvents | OneTimePrivateEvents;
@@ -29,19 +27,15 @@ export interface PrivateEvent {
   end: string;
   durationInMinutes: number;
   timeZone: string;
-  asJson: object;
+  asJson: AsJson;
 }
 
-export interface SeasonRehearsal extends PrivateEvent {
-  eventType: RepetitiveEvents.recurringRehearsal,
-  asJson: {
-    dayOfTheWeek: string;
-  },
-}
+export interface PrivateEventUpdateRequest extends PrivateEvent {}
 
-export interface Rehearsal extends PrivateEvent {
-  eventType: OneTimePrivateEvents.rehearsal,
-  asJson: {
-    place: string;
-  },
+export interface AsJson {
+  dayOfTheWeek?: string;
+  startAt?: {
+    hour: number,
+    minute: number,
+  }
 }

@@ -1,7 +1,7 @@
-import { PrivateEvent, PrivateEventType } from "./PrivateEvent";
+import { AsJson, PrivateEvent, PrivateEventType } from "./PrivateEvent";
 
 export interface PrivateEventRequest {
-    eventType: PrivateEventType;
+    eventType: string;
     title: string;
     description: string;
     address: string;
@@ -10,7 +10,8 @@ export interface PrivateEventRequest {
     mapLink: string;
     start: Date;
     end: Date;
-    durationInMinutes: number; 
+    durationInMinutes: number;
+    asJson: AsJson;
 }
 
 export interface PrivateEventResponse {
@@ -18,7 +19,8 @@ export interface PrivateEventResponse {
 }
 
 export interface GetPrivateEventsResponse {
-  events: PrivateEvent;
+  events: PrivateEvent[];
+  recurring: PrivateEvent[];
 }
 
 export interface GetRecurringEventsResponse {
