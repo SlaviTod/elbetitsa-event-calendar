@@ -246,6 +246,7 @@
     "err_country_r_match": "The country name must contains only letters and symbols ",
     "event_msg_success": "The event was added successfully",
     "event_msg_error": "The event was not added",
+    "update_event_msg_success": "The event was updated successfully",
     "event_update_msg_error": "The event was not updated",
     "lang_change_msg_warning": "You have change the language. The changes will not be saved",
     "day7": "Sunday",

@@ -147,7 +147,7 @@ export default function CalendarScreen() {
       }));
       setData({ privateEvents: res.events, recurring: res.recurring });
     } catch (err) {
-      console.log('Fetch events error', err);
+      console.log('Fetch private events error', err);
     } finally {
       setLoading(false);
     }
@@ -157,7 +157,7 @@ export default function CalendarScreen() {
   const inputRef = useRef(null);
 
   const handleOnDayPress = (day: DateData) => {
-
+    // only for info and attendance
     const dayAfterToday = Interval.fromDateTimes(DateTime.now(), new Date(day.timestamp));
 
     // if (!dayAfterToday.isValid) {
@@ -167,6 +167,20 @@ export default function CalendarScreen() {
     // }
     setSelected(day);
 
+    //   // {"dateString": "2026-03-11", "day": 11, "month": 3, "timestamp": 1773187200000, "year": 2026}
+  }
+
+  const handleOnDayLongPress = (day: DateData) => {
+    const dayAfterToday = Interval.fromDateTimes(DateTime.now(), new Date(day.timestamp));
+
+    // if (!dayAfterToday.isValid) {
+    //   Alert.alert(t('warning'), t('eventTimeInvalid'), [{
+    //     text: t('close')
+    //   }]);
+    // }
+
+    setSelected(day);
+
     let eventsForTheDay: string[] = [];
     const markedDateStrings = Object.keys(markedEventDates);
     markedDateStrings.forEach(key => {
@@ -174,7 +188,7 @@ export default function CalendarScreen() {
     })
     const actionList = ['add_event',];
     if (eventsForTheDay.length) actionList.push('update_event', 'delete_event');
-    // actionList[user?.role] || []
+
     // TODO check if event type 
     // if ([Role.admin, Role.conductor].includes(user.role)) actionList.push('cancel_rehearsal');
     setActionList(actionList);
@@ -182,7 +196,6 @@ export default function CalendarScreen() {
     // @ts-expect-error
     if (inputRef?.current) inputRef?.current?.focus();
 
-    //   // {"dateString": "2026-03-11", "day": 11, "month": 3, "timestamp": 1773187200000, "year": 2026}
   }
 
 
@@ -266,6 +279,7 @@ export default function CalendarScreen() {
           markedDates={markedEventDates}
           handleMonthChange={handleMonthChange}
           onDaySelect={handleOnDayPress}
+          onLongDaySelect={handleOnDayLongPress}
         />
       </ThemedView>
 

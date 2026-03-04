@@ -10,7 +10,7 @@ import { commonStyles, containers, pickerStyles } from '@/styling/common';
 
 
 import { ThemeButton } from '../buttons/ThemeButton/ThemeButton';
-import { ApiEndpoints, ElbetitsaApiCalls, PrivateEventRequest, PrivateEventResponse, PrivateEventType, RepetitiveEvents, Role } from '@/types';
+import { ApiEndpoints, ElbetitsaApiCalls, PrivateEvent, PrivateEventResponse, PrivateEventType, PrivateEventUpdateRequest, RepetitiveEvents, Role } from '@/types';
 import { EventValidationSchema } from './eventValidationSchema';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedPicker } from '../themed/themed-picker';
@@ -34,11 +34,11 @@ const daysOfTheWeek: string[] = ['day1', 'day2', 'day3', 'day4', 'day5', 'day6',
 
 
 type EventProps = {
-  date?: string;
+  event: PrivateEvent;
 }
 
-export const EventForm = ({
-  date,
+export const UpdateEventForm = ({
+  event,
 }: EventProps) => {
 
   const { t, i18n } = useTranslation();
@@ -46,23 +46,15 @@ export const EventForm = ({
 
   const router = useRouter();
 
-  // if (!date) {
-  //   Alert.alert(t('warning'), t('eventForm_msg'), [{
-  //     text: t('close')
-  //   }]);
-  //   router.back();
-  // }
-  const start = date ? DateTime.fromFormat(date, 'yyyy-MM-dd').toJSDate() : DateTime.now().toJSDate();
-
   const { user } = useContext(AuthContext);
 
   const isAdmin = user.role === Role.admin;
   const isConductor = user.role === Role.conductor;
 
-  const requestArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.createEvent] });
 
+  const requestArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.updateEvent], params: [event.id.toString()] });
 
-  const onSubmit = async (values: PrivateEventRequest) => {
+  const onSubmit = async (values: PrivateEventUpdateRequest) => {
     setIsSend(true);
     try {
       const res: PrivateEventResponse = await requester({
@@ -70,13 +62,13 @@ export const EventForm = ({
         formData: values,
       });
 
-      Alert.alert(t('warning'), `${t('event_msg_success')}`, [{
+      Alert.alert(t('warning'), `${t('update_event_msg_success')}`, [{
         text: t('close')
       }])
       router.back();
     } catch (err: Error | unknown) {
       // @ts-expect-error ​
-      Alert.alert(t('error'), `${t('event_msg_error')}. ${err instanceof Error ? t(err.message) : ''}. ${t('tryAgain')}`, [{
+      Alert.alert(t('error'), `${t('event_update_msg_error')}. ${err instanceof Error ? t(err.message) : ''}. ${t('tryAgain')}`, [{
         text: t('close')
       }])
       console.log('Log error', err);
@@ -104,12 +96,13 @@ export const EventForm = ({
   }
 
   const prepareEndOfTheEvent = (start: Date, duration?: number) => {
+    if (event.eventType === RepetitiveEvents.recurringRehearsal) return; // for trips ???
     return duration ?
       DateTime.fromJSDate(start).plus({ minute: duration }).toJSDate()
       : DateTime.fromJSDate(start).endOf('day').toJSDate();
   }
 
-  const prepareAsJSONstartAt = (asJson: string, data: object) => {
+    const prepareAsJSONstartAt = (asJson: string, data: object) => {
     const oldVal = JSON.parse(asJson);
     return JSON.stringify({ ...oldVal, startAt: { ...oldVal?.startAt, ...data } });
   }
@@ -118,6 +111,7 @@ export const EventForm = ({
     const oldVal = JSON.parse(asJson);
     return JSON.stringify({ ...oldVal, ...data });
   }
+
 
   return (<SafeAreaView>
     <ThemedSwitch
@@ -135,18 +129,20 @@ export const EventForm = ({
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
         <Formik
           initialValues={{
-            eventType: '',
-            title: '',
-            description: '',
-            address: '',
-            city: '',
-            country: '',
-            mapLink: '',
-            start: start,
-            end: prepareEndOfTheEvent(start),
-            durationInMinutes: 0,
-            asJson: '{}',
-          } as PrivateEventRequest}
+            id: event?.id,
+            eventType: event?.eventType,
+            title: event?.title || null,
+            description: event?.description || null,
+            address: event?.address || null,
+            city: event?.city || null,
+            country: event?.country || null,
+            mapLink: event?.mapLink || '',
+            start: event?.start ? DateTime.fromISO(event.start).toJSDate() : undefined,
+            end: event?.end ? DateTime.fromISO(event.end).toJSDate() : undefined,
+            durationInMinutes: event?.durationInMinutes || 0,
+            timeZone: event?.timeZone || '',
+            asJson: JSON.stringify(event?.asJson) || '{}',
+          } as PrivateEventUpdateRequest}
           validationSchema={EventValidationSchema(t)}
           onSubmit={values => onSubmit(values)}
         >
@@ -193,18 +189,22 @@ export const EventForm = ({
                 <ThemedText style={commonStyles.label}>{t('set_event_start_time_r')}</ThemedText>
                 <ThemedView style={[containers.inputWr, { borderColor: 'transparent', margin: 0 }, containers.titleWithIconButton]}>
                   <TimePicker
-                    startHour={''}
-                    startMinutes={''}
+                    startHour={event.asJson?.startAt?.hour || ''}
+                    startMinutes={event.asJson?.startAt?.minute || ''}
                     value={values.start}
                     returnDateObjUnit={true}
-                    onChangePart={(datePart) => {
+                    onChangePart={(datePart) => { 
+                      console.log("🚀 ~ UpdateEventForm ~ datePart:", datePart)
                       console.log('values.asJson before time', values.asJson);
                       setFieldValue('asJson', prepareAsJSONstartAt(values.asJson, datePart ));
                       // setFieldValue('asJson', { ...values.asJson, startAt: { ...values.asJson?.startAt, ...datePart } }) 
+                      console.log('values.asJson after time', values.asJson);
                     }}
                   />
                 </ThemedView>
-              </>}{!!values.durationInMinutes && <ThemedText style={commonStyles.label}>{t('durationInMinutes')}</ThemedText>}
+              </>}
+
+              {!!values.durationInMinutes && <ThemedText style={commonStyles.label}>{t('durationInMinutes')}</ThemedText>}
               <MyInput
                 wrapperStyle={containers.inputWr}
                 style={commonStyles.input}
@@ -227,15 +227,15 @@ export const EventForm = ({
                 <ThemedView style={[containers.inputWr, { paddingLeft: 10 }]}>
                   {showRequired && <RequiredStar />}
                   <ThemedPicker
-                    selectedValue={''}
+                    selectedValue={event.asJson?.dayOfTheWeek}
                     optionsList={daysOfTheWeek}
                     showChoose={values.asJson ? false : true}
                     style={pickerStyles.picker}
                     mode={"dropdown"}
                     label={t('dayOfWeek')}
                     t={t}
+
                     onValueChange={(val) => setFieldValue('asJson', prepareAsJSON(values.asJson, { dayOfTheWeek: val }))}
-                  // onValueChange={(val) => setFieldValue('asJson', { ...values.asJson, dayOfTheWeek: val.toString() })}
                   />
                 </ThemedView>
 
@@ -258,12 +258,12 @@ export const EventForm = ({
                       firstDay={i18n.language === 'bg' ? 1 : 0}
                       hideExtraDays={true}
                       disableAllTouchEventsForDisabledDays={true}
-
                       onDayPress={(day) => { setFieldValue('end', new Date(day.timestamp)); setShowEndTime(false) }}
+
                     />
+
                   </ThemedView>}
                 </ThemedView>
-
 
               </>}
 

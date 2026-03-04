@@ -45,7 +45,7 @@ export default function HomeScreen() {
         setPublicData(res.events);
       }
     } catch (err) {
-      console.log('Fetch events error', err);
+      console.log('Fetch public events error', err);
     } finally {
       setLoading(false);
     }

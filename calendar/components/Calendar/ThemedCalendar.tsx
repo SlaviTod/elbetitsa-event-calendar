@@ -56,15 +56,16 @@ LocaleConfig.locales['bg'] = {
 
 type TCalendarProps = CalendarProps & ContextProp & {
   onDaySelect: (day: DateData) => void,
+  onLongDaySelect: (day: DateData) => void,
   handleMonthChange?: (day: DateData) => void,
 }
 
 
 export const TheCalendar = ({
   hideDayNames = false,
-
   handleMonthChange = () => { },
   onDaySelect,
+  onLongDaySelect,
   ...otherProps
 }: TCalendarProps) => {
 
@@ -88,13 +89,14 @@ export const TheCalendar = ({
 
     const dayAfterToday = Interval.fromDateTimes(DateTime.now(), new Date(day.timestamp));
 
-    if (!dayAfterToday.isValid) {
-      Alert.alert(t('warning'), t('eventTimeInvalid'), [{
-        text: t('close')
-      }]);
-    }
+    // if (!dayAfterToday.isValid) {
+    //   Alert.alert(t('warning'), t('eventTimeInvalid'), [{
+    //     text: t('close')
+    //   }]);
+    // }
     onDaySelect(day);
   }
+
 
   return (
     <SafeAreaView style={[containers.flexCenter, { margin: 0, padding: 0, }]}>
@@ -109,7 +111,7 @@ export const TheCalendar = ({
         disableAllTouchEventsForDisabledDays={true}
 
         onDayPress={(day) => { handleOnDayPress(day); console.log('onDayPress', day) }}
-        onDayLongPress={(day) => console.log('onDayLongPress', day)}
+        onDayLongPress={(day) => {console.log('onDayLongPress', day); onLongDaySelect(day)}}
         onMonthChange={(date) => { console.log('onMonthChange', date); handleMonthChange(date) }}
         onPressArrowLeft={(goToPreviousMonth) => {
           console.log('onPressArrowLeft'); goToPreviousMonth();
