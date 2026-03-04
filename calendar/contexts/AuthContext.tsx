@@ -1,4 +1,4 @@
-import { LoginResponse, User } from '@/types';
+import { LoginResponse, Role, User } from '@/types';
 import { SplashScreen, useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
@@ -37,9 +37,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setToken(token);
     setIsLoggedIn(true);
     storeAuthState({ user, token, isLoggedIn: true });
-    // TODO  
-    // router.dismissTo('calendar'); 
-    router.replace('/profile');
+    if([Role.user].includes(user.role)) router.replace('/profile');
+    router.replace('/calendar');
   }
 
   const logOut = async () => {

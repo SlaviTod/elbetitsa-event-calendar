@@ -1,0 +1,13 @@
+{
+  "ios": {
+    "CFBundleDisplayName": "Elbetitsa Calendar",
+    "NSContactsUsageDescription": "Elbetitsa Events Calendar",
+    "Localizable.strings": {
+      "HELLO_NOTIFICATION_KEY": "Welcome to Elbetitsa Events Calendar"
+    }
+  },
+  "android": {
+    "app_name": "Elbetitsa Calendar",
+    "HELLO_NOTIFICATION_KEY": "Welcome to Elbetitsa Events Calendar"
+  }
+}

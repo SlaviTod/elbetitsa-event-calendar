@@ -99,11 +99,9 @@ export default function CalendarScreen() {
     let marked = {} as MyMarkedDates;
 
     events.map((event) => {
-      console.log("🚀 ~ CalendarScreen ~ event:", event)
       const dateString = DateTime.fromISO(event.start).toFormat('yyyy-MM-dd');
-      console.log("🚀 ~ markDates ~ dateString:", dateString)
-      // @ts-expect-error
-      marked = { ...marked, [dateString]: { selected: true, marked: true, selectedColor: 'orange' } }
+
+      marked = { ...marked, [dateString]: { eventId: event.id, eventType: event.eventType, selected: true, marked: true, selectedColor: 'orange' } }
     })
 
     return marked;
@@ -185,6 +183,7 @@ export default function CalendarScreen() {
 
     let eventsForTheDay: string[] = [];
     const markedDateStrings = Object.keys(markedEventDates);
+
     markedDateStrings.forEach(key => {
       if (key === day.dateString) eventsForTheDay.push(key);
     })
@@ -202,7 +201,6 @@ export default function CalendarScreen() {
 
 
   const handleMonthChange = (day: DateData) => {
-    console.log("🚀 ~ handleMonthChange ~ day:", day)
 
     const dayAfterToday = Interval.fromDateTimes(DateTime.now(), new Date(day.timestamp));
 
@@ -252,6 +250,7 @@ export default function CalendarScreen() {
           pathname: '/(protected)/(tabs)/calendar/update-event',
           params: {
             id: markedEventDates[selected.dateString].eventId,
+            type: markedEventDates[selected.dateString].eventType,
           }
         })
         break;

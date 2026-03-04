@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Pressable, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useContext, useState } from 'react';
+import { Pressable, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { useNavigation } from 'expo-router';
 import { useTranslation } from "react-i18next";
 import { Formik } from 'formik';
@@ -12,16 +12,40 @@ import { commonStyles, containers } from '@/styling/common';
 
 import { RegisterValidationSchema } from './registerValidationSchema';
 import { ThemeButton } from '../buttons/ThemeButton/ThemeButton';
-import { LoginRequest } from '@/types';
+import { ApiEndpoints, ElbetitsaApiCalls, LoginResponse, RegisterRequest } from '@/types';
+import { useRequesterArgs } from '@/hooks/useRequesterArgs';
+import { requester } from '@/requester/requester';
+import { AuthContext } from '@/contexts/AuthContext';
 
 
 export const RegisterForm = () => {
 
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { logIn } = useContext(AuthContext);
 
-  const onSubmit = (values: LoginRequest) => {
-    // TODO requester + isSend
+  const requestArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.register] });
+
+  const onSubmit = async (values: RegisterRequest) => {
+    setIsSend(true);
+    try {
+      const res: LoginResponse = await requester({
+        ...requestArgs,
+        formData: values,
+      });
+
+      Alert.alert(t('warning'), `${t('registration_msg_success')}`, [{
+        text: t('oKey')
+      }])
+      logIn(res);
+    } catch (err: Error | unknown) {
+      // @ts-expect-error ​
+      Alert.alert(t('error'), `${t('registration_msg_error')}. ${err instanceof Error ? t(err.message) : ''}. ${t('tryAgain')}`, [{
+        text: t('close')
+      }])
+      console.log('Log error', err);
+      setIsSend(false);
+    }
   }
 
   const [hidePass, setHidePass] = useState(true);
@@ -132,6 +156,7 @@ export const RegisterForm = () => {
 
             <ThemedView style={containers.inlineLinkContainer}>
               <ThemedText type="mini">{t('login_msg_1')}</ThemedText>
+              {/* TODO check */}
               <Pressable onPress={() => navigation.goBack()}>
                 <ThemedText type="linkMini">{t('login_msg_btn')}</ThemedText>
               </Pressable>
