@@ -20,6 +20,7 @@ import { requester } from "@/requester/requester";
 import { useRequesterArgs } from "@/hooks/useRequesterArgs";
 import { ThemedPicker } from "@/components/themed/themed-picker";
 import { MarkedDates } from "react-native-calendars/src/types";
+import { MarkingProps } from "react-native-calendars/src/calendar/day/marking";
 
 
 const authorizedForEventCreation: Role[] = [Role.admin, Role.conductor, Role.member];
@@ -34,7 +35,11 @@ const actionList = {
   admin: ['add_event', 'update_event', 'delete_event', 'cancel_rehearsal', 'set_attendance'],
 }
 
-type MyMarkedDates = MarkedDates & {
+
+export type MyMarkedDates = {
+  [key: string]: MyMarkingProps;
+};
+type MyMarkingProps = MarkingProps & {
   eventType: PrivateEventType;
   eventId: number;
 }
@@ -60,7 +65,7 @@ export default function CalendarScreen() {
   }, [])
 
   const markRecurringEvents = useCallback((events: PrivateEvent[], currentMonth: Interval) => {
-    let marked = {};
+    let marked = {} as MyMarkedDates;
 
     if (events?.length) events.map((event) => {
       // @ts-expect-error
@@ -91,14 +96,13 @@ export default function CalendarScreen() {
   }, [])
 
   const markDates = useCallback((events: PrivateEvent[]) => {
-    // console.log("🚀 ~ markDates ~ events:", events)
-    let marked = {};
+    let marked = {} as MyMarkedDates;
 
     events.map((event) => {
       console.log("🚀 ~ CalendarScreen ~ event:", event)
       const dateString = DateTime.fromISO(event.start).toFormat('yyyy-MM-dd');
       console.log("🚀 ~ markDates ~ dateString:", dateString)
-
+      // @ts-expect-error
       marked = { ...marked, [dateString]: { selected: true, marked: true, selectedColor: 'orange' } }
     })
 
@@ -122,7 +126,7 @@ export default function CalendarScreen() {
 
   useEffect(() => {
     loadPrivateEvents();
-    // if (!data.areRecurringSet) loadRecurringEvents();
+
   }, [calendarMonth])
 
 
@@ -140,9 +144,7 @@ export default function CalendarScreen() {
           end: calendarMonth.end?.toISO(),
         }
       });
-      console.log(markRecurringEvents(res.recurring as PrivateEvent[], calendarMonth))
-      setMarkedDates((st) => ({
-        ...st, ...markDates(res.events?.length ? res.events : []),
+      setMarkedDates((st) => ({...markDates(res.events?.length ? res.events : []),
         ...markRecurringEvents(res.recurring as PrivateEvent[], calendarMonth)
       }));
       setData({ privateEvents: res.events, recurring: res.recurring });
@@ -215,6 +217,30 @@ export default function CalendarScreen() {
     //   // {"dateString": "2026-03-11", "day": 11, "month": 3, "timestamp": 1773187200000, "year": 2026}
   }
 
+  // TODO 
+  const requestDeleteArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.deleteEvent] });
+
+  const deleteEvent = async (eventId: number) => {
+    try {
+      const res: GetPrivateEventsResponse = await requester({
+        ...requestDeleteArgs,
+        url: `${requestDeleteArgs.url}/${eventId}`,
+      });
+      loadPrivateEvents();
+      Alert.alert(t('warning'), t('delete_event_msg'), [{
+        text: t('oKey')
+      }]);
+    } catch (err) {
+      // @ts-expect-error ​
+      Alert.alert(t('error'), `${t('delete_event_msg_err')}. ${err instanceof Error ? t(err.message) : ''}. ${t('tryAgain')}`, [{
+        text: t('close')
+      }])
+      console.log('Fetch private events error', err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const handleAction = (val: any) => {
     switch (val) {
       case 'add_event': {
@@ -225,12 +251,13 @@ export default function CalendarScreen() {
         router.navigate({
           pathname: '/(protected)/(tabs)/calendar/update-event',
           params: {
-            // @ts-expect-error
             id: markedEventDates[selected.dateString].eventId,
           }
         })
         break;
       case 'delete_event':
+        deleteEvent(markedEventDates[selected.dateString].eventId);
+        break;
       case 'set_attendance':
       case 'cancel_rehearsal':
 
@@ -241,7 +268,7 @@ export default function CalendarScreen() {
   return (
     <SafeAreaView style={containers.mainContainer}>
 
-      <ThemeButton
+      {/* <ThemeButton
         buttonStyle={[commonStyles.themedButtonWithIcon]}
         handler={() => router.navigate({ pathname: '/(protected)/(tabs)/calendar/add-event', params: { date: selected.dateString } })}
         iconName="add"
@@ -249,7 +276,7 @@ export default function CalendarScreen() {
         iconColor={commonStyles.themedButtonWithIcon.color}
         textStyle={commonStyles.subtitle}
         buttonText={t('add_event')}
-      />
+      /> */}
 
       <ThemedView>
         <ThemedPicker
@@ -282,8 +309,6 @@ export default function CalendarScreen() {
           onLongDaySelect={handleOnDayLongPress}
         />
       </ThemedView>
-
-
 
     </SafeAreaView>
   );

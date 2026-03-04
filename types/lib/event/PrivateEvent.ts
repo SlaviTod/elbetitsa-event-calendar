@@ -30,6 +30,8 @@ export interface PrivateEvent {
   asJson: AsJson;
 }
 
+export interface PrivateEventUpdateRequest extends PrivateEvent {}
+
 export interface AsJson {
   dayOfTheWeek?: string;
   startAt?: {

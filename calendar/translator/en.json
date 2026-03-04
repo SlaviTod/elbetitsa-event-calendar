@@ -1,6 +1,10 @@
   {
     "set_attendance": "Mark attendance",
     "delete_event": "Delete event",
+    "view_day_info": "Виж ",
+    "cancel_rehearsal": "Cancel the rehearsal",
+    "delete_event_msg": "The event was deleted",
+    "delete_event_msg_err": "The event was not deleted",
     "h": "h",
     "m": "m",
     "endTimeSwitch_true": "Скрий календара",

@@ -3,6 +3,8 @@
   "set_attendance": "Отбележете присъствие",
   "cancel_rehearsal": "Отмени репетиция",
   "delete_event": "Изтрий събитие",
+  "delete_event_msg": "Успешно изтрихте събитие",
+  "delete_event_msg_err": "Не изтрихте събитието",
   "h": "ч",
   "m": "м",
   "endTimeSwitch_true": "Скрий календара",
