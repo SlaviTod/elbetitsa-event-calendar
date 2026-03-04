@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Alert } from "react-native";
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import { useTranslation } from "react-i18next";
 
@@ -12,7 +12,7 @@ import { LoginValidationSchema } from "./validateLoginForm";
 import { commonStyles, containers } from '@/styling/common';
 import { requester } from '@/requester/requester';
 import { AuthContext } from '@/contexts/AuthContext';
-import { ApiEndpoints, ElbetitsaApiCalls, LoginRequest, LoginResponse } from '@/types';
+import { ApiEndpoints, ElbetitsaApiCalls, LoginRequest, LoginResponse, Role } from '@/types';
 import { useRequesterArgs } from '@/hooks/useRequesterArgs';
 import { ThemeButton } from '../buttons/ThemeButton/ThemeButton';
 
@@ -22,6 +22,7 @@ export const LoginForm = () => {
   const { t } = useTranslation();
 
   const { logIn } = useContext(AuthContext);
+  const router = useRouter();
 
   const [isSend, setIsSend] = useState(false);
 
@@ -36,6 +37,7 @@ export const LoginForm = () => {
       });
 
       logIn(res);
+      res.user.role === Role.user ? router.replace('/profile') : router.replace('/calendar');
     } catch (err: Error | unknown) {
       // @ts-expect-error ​
       Alert.alert(t('error'), `${t('login_msg_error')}. ${err instanceof Error ? t(err.message) : ''}. ${t('tryAgain')}`, [{

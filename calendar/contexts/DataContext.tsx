@@ -11,6 +11,7 @@ export interface EventsState {
 export interface DataState extends EventsState {
   setData: (data: Partial<EventsState>) => void,
   setPublicData: (data: PublicEvent[]) => void,
+  refreshEvents: () => void,
 }
 
 export const DataContext = createContext<DataState>({
@@ -19,6 +20,7 @@ export const DataContext = createContext<DataState>({
     recurring: [],
   setData: () => { },
   setPublicData: () => { },
+  refreshEvents: () => {},
 })
 
 
@@ -38,8 +40,11 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
     setEvents((st) => ([ ...st, ...events ]));
   }
 
+  const refreshEvents = () => {
+    setEvents([]);
+  }
 
-  return (<DataContext.Provider value={{ events, privateEvents, recurring, setData, setPublicData }}>
+  return (<DataContext.Provider value={{ events, privateEvents, recurring, setData, setPublicData, refreshEvents }}>
     {children}
   </DataContext.Provider>);
 }

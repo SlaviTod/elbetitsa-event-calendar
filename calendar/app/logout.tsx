@@ -11,8 +11,7 @@ export default function LogOut() {
 
   useEffect(() => {
     logOut();
-
-    router.dismissTo('/login');
+    router.replace('/login');
   }, []);
 
 

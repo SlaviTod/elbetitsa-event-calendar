@@ -12,6 +12,7 @@ import { UserProfileForm } from "@/components/UserProfileForm/UserProfileForm";
 import { IconButton } from "@/components/buttons/IconButton";
 import { ChangePass } from "@/components/ChangePassForm/ChangePassForm";
 import { ProfileImage } from "@/components/buttons/ProfileImage";
+import { Role } from "@/types";
 
 const apiHost = process.env.EXPO_PUBLIC_API_URL;
 
@@ -30,6 +31,12 @@ export default function Profile() {
     }]);
     return (<Redirect href="/login" />);
   }
+
+  // if ([Role.user].includes(user.role)) {
+  //   Alert.alert(t('actionNeed'), t('role_user_sub'), [{
+  //     text: t('oKey')
+  //   }]);
+  // }
 
   // TODO use gallery or take photo 
   const uploadPhoto = () => {

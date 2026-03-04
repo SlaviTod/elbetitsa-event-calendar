@@ -16,7 +16,7 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 
 export default function HomeScreen() {
 
-  const { events, setPublicData } = useContext(DataContext);
+  const { events, setPublicData, refreshEvents } = useContext(DataContext);
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -49,12 +49,12 @@ export default function HomeScreen() {
     } finally {
       setLoading(false);
     }
-  }, [hasMore, page, loading])
+  }, [hasMore, page, loading, refreshing])
 
   const refreshPublicEvents: () => Promise<void> = useCallback(async () => {
     if (loading) return;
     setRefreshing(true);
-    setPublicData(events);
+    refreshEvents();
     setPage(1);
     setHasMore(true);
     await loadPublicEvents();
