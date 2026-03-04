@@ -20,8 +20,8 @@ export default function ModalScreen() {
 
   const router = useRouter();
 
-  const { data } = useContext(DataContext);
-  const event = data.events.find(el => el.id == item.id);
+  const { events } = useContext(DataContext);
+  const event = events.find(el => el.id == item.id);
 
 
   return (
@@ -31,7 +31,7 @@ export default function ModalScreen() {
           <ThemedText type="title" style={commonStyles.title}>{event?.CalendarEventDetails[0].title}</ThemedText>
           {event?.start && <ThemedText type="title">{DateTime.fromISO(event.start).setLocale('bg').toFormat('d LLLL yyyy')}</ThemedText>}
         </ThemedView>
-        <IconButton name="return-up-back" size={26} onPressHandler={() => router.navigate('/')} />
+        <IconButton name="return-up-back" size={26} onPressHandler={() => router.dismissTo('/')} />
       </ThemedView>
       <ScrollView>
         <ThemedView >

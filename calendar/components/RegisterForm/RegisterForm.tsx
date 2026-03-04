@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Pressable, KeyboardAvoidingView, Platform, Alert } from "react-native";
-import { useNavigation } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 import { useTranslation } from "react-i18next";
 import { Formik } from 'formik';
 
@@ -23,6 +23,7 @@ export const RegisterForm = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { logIn } = useContext(AuthContext);
+  const router = useRouter();
 
   const requestArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.register] });
 
@@ -38,6 +39,7 @@ export const RegisterForm = () => {
         text: t('oKey')
       }])
       logIn(res);
+      router.dismissTo('/profile');
     } catch (err: Error | unknown) {
       // @ts-expect-error ​
       Alert.alert(t('error'), `${t('registration_msg_error')}. ${err instanceof Error ? t(err.message) : ''}. ${t('tryAgain')}`, [{

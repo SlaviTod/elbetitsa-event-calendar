@@ -11,7 +11,7 @@ export interface PrivateEventRequest {
     start: Date;
     end: Date;
     durationInMinutes: number;
-    asJson: AsJson;
+    asJson: string;
 }
 
 export interface PrivateEventResponse {

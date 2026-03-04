@@ -142,7 +142,7 @@ interface PrivateEventRequest {
     start: Date;
     end: Date;
     durationInMinutes: number;
-    asJson: AsJson;
+    asJson: string;
 }
 interface PrivateEventResponse {
     event: PrivateEvent;
