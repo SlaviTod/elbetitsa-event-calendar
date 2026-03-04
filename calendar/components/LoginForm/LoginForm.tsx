@@ -12,7 +12,7 @@ import { LoginValidationSchema } from "./validateLoginForm";
 import { commonStyles, containers } from '@/styling/common';
 import { requester } from '@/requester/requester';
 import { AuthContext } from '@/contexts/AuthContext';
-import { ApiEndpoints, ElbetitsaApiCalls, LoginRequest, LoginResponse } from '@/types/dist';
+import { ApiEndpoints, ElbetitsaApiCalls, LoginRequest, LoginResponse } from '@/types';
 import { useRequesterArgs } from '@/hooks/useRequesterArgs';
 import { ThemeButton } from '../buttons/ThemeButton/ThemeButton';
 

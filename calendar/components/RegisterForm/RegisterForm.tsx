@@ -12,7 +12,7 @@ import { commonStyles, containers } from '@/styling/common';
 
 import { RegisterValidationSchema } from './registerValidationSchema';
 import { ThemeButton } from '../buttons/ThemeButton/ThemeButton';
-import { LoginRequest } from '@/types/dist';
+import { LoginRequest } from '@/types';
 
 
 export const RegisterForm = () => {

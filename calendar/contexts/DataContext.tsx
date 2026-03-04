@@ -1,66 +1,45 @@
-// import { PrivateEvent, PublicEvent } from "@/types/dist";
-// import { createContext, PropsWithChildren, useState } from "react";
-// import { useTranslation } from "react-i18next";
+import { PrivateEvent, PublicEvent } from "@/types";
+import { createContext, PropsWithChildren, useState } from "react";
 
 
-// export type DataState = {
-//   currentMonth: string; // format: "MM-YYYY" => updated when get public events (home screen)
-//   publicEvents: PublicEvent[]; // add them to calendar 
-//   privateEvents: PrivateEvent[]; // get them for currentMonth 
+export interface EventsState {
+  events: PublicEvent[];
+  privateEvents: PrivateEvent[];
+  recurring: PrivateEvent[];
+}
 
-// }
+export interface DataState extends EventsState {
+  setData: (data: Partial<EventsState>) => void,
+  setPublicData: (data: PublicEvent[]) => void,
+}
 
-// export const DataContext = createContext<DataState>({
-//   currentMonth: '',
-//   publicEvents: [],
-//   privateEvents: [],
-// })
+export const DataContext = createContext<DataState>({
+    events: [],
+    privateEvents: [],
+    recurring: [],
+  setData: () => { },
+  setPublicData: () => { },
+})
 
 
-// const dataStorageKey = 'data';
+export const DataProvider = ({ children }: PropsWithChildren) => {
 
-// export const DataProvider = ({ children }: PropsWithChildren) => {
-
-//   const [currentMonth, setCurrentMont] = useState('');
-//   const [publicEvents, setPublicEvents] = useState([]);
+  const [events, setEvents] = useState([] as PublicEvent[]);
+  const [privateEvents, setPrivateEvents] = useState([] as PrivateEvent[]);
+  const [recurring, setRecurring] = useState([] as PrivateEvent[]);
   
-//   const [isReady, setIsReady] = useState(false);
 
-//   const { i18n } = useTranslation();
+  const setData = (data: Partial<EventsState>) => {
+    if (data?.privateEvents) setPrivateEvents(data.privateEvents);
+    if (data?.recurring) setRecurring(data.recurring);
+  }
 
-//   const onLngSelect = (lng: Language) => {
-//     setSelected(lng);
-//     i18n.changeLanguage(lng?.code);
-//     storeLngState({ lng });
-//   }
+  const setPublicData = (events: PublicEvent[]) => {
+    setEvents((st) => ([ ...st, ...events ]));
+  }
 
-//     useEffect(() => {
-//     const getLngFromStorage = async () => {
-//       try {
-//         const json = await AsyncStorage.getItem(lngStorageKey);
-//         if (json) {
-//           const persisted = JSON.parse(json);
-//           console.log(persisted);
-//           setSelected(persisted.lng);
-//         }
-//       } catch (err) {
-//         console.log('Error retrieving lng', err);
-//       }
-//       setIsReady(true);
-//     };
-//     getLngFromStorage();
-//   }, [])
 
-//     const storeLngState = async (newState: { lng: Language }) => {
-//     try {
-//       const val = JSON.stringify(newState);
-//       await AsyncStorage.setItem(lngStorageKey, val);
-//     } catch (err) {
-//       console.log('Error saving lng', err);
-//     }
-//   }
-
-//   return (<LngContext.Provider value={{ languages, selectedLang, onLngSelect }}>
-//     {children}
-//   </LngContext.Provider>);
-// }
+  return (<DataContext.Provider value={{ events, privateEvents, recurring, setData, setPublicData }}>
+    {children}
+  </DataContext.Provider>);
+}

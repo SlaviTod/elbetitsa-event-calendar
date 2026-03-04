@@ -1,8 +1,6 @@
-import { containers } from "@/styling/common";
 import { ThemedView } from "../themed/themed-view";
-import { Image } from 'expo-image';
 import { IconButton } from "./IconButton";
-import { ImageStyle, Pressable, StyleProp, ViewStyle } from "react-native";
+import { ImageStyle, StyleProp, ViewStyle } from "react-native";
 import { ImgButton } from "./ImgButton";
 
 const apiHost = process.env.EXPO_PUBLIC_API_URL;

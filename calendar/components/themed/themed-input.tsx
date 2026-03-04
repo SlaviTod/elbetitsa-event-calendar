@@ -1,5 +1,4 @@
 import { TextInput, TextInputProps } from 'react-native';
-
 import { useThemeColor } from '@/hooks/use-theme-color';
 
 export type ThemedInputProps = TextInputProps & {
@@ -13,15 +12,15 @@ export function ThemedInput({
   style,
   lightColor,
   darkColor,
-  hideText = true,
+  hideText = false,
   editable = true,
   type = 'default',
+  multiline,
   ...otherProps }: ThemedInputProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
   const placeColor = useThemeColor({ light: lightColor, dark: darkColor }, 'placeholder');
 
-  if (!editable) return (<TextInput style={[{ color: placeColor }, style]} {...otherProps} />);
-  if (type !== 'password' || !hideText) return (<TextInput placeholderTextColor={placeColor} style={[{ color }, style]} {...otherProps} />);
+  if (!editable) return (<TextInput style={[{ color: placeColor }, style]} multiline={multiline} {...otherProps} />);
 
-  return (<TextInput secureTextEntry={hideText} placeholderTextColor={placeColor} style={[{ color }, style]} {...otherProps} />);
+  return (<TextInput secureTextEntry={hideText} placeholderTextColor={placeColor} style={[{ color }, style]} multiline={multiline} {...otherProps} />);
 }

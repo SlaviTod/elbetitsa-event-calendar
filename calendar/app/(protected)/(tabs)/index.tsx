@@ -1,105 +1,104 @@
-import { Platform, StyleSheet } from 'react-native';
-
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { ThemedText } from '@/components/themed/themed-text';
 import { ThemedView } from '@/components/themed/themed-view';
-import { Link } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { containers } from '@/styling/common';
-import { useState } from 'react';
+import { useRequesterArgs } from '@/hooks/useRequesterArgs';
+import { ApiEndpoints, ElbetitsaApiCalls, GetEventsResponse, PublicEvent } from '@/types';
+import { requester } from '@/requester/requester';
+import { EventItem } from '@/components/EventItem/EventItem';
+import { DataContext } from '@/contexts/DataContext';
+import { useThemeColor } from '@/hooks/use-theme-color';
+
 
 export default function HomeScreen() {
 
-  // const [events, setEvents] = useState([])
+  const { events, setPublicData } = useContext(DataContext);
 
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const { t } = useTranslation();
+
+  const requestArgs = useRequesterArgs({ request: ElbetitsaApiCalls[ApiEndpoints.getPublicEvents] });
+
+  const loadPublicEvents: () => Promise<void> = useCallback(async () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    try {
+      const res: GetEventsResponse = await requester({
+        ...requestArgs,
+        queryKeys: ['currentPage'],
+        queries: {
+          currentPage: page,
+        }
+      });
+      if (res.events?.length === 0) {
+        setHasMore(false);
+      } else {
+        setPage((st) => st + 1);
+        setPublicData(res.events);
+      }
+    } catch (err) {
+      console.log('Fetch public events error', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [hasMore, page, loading])
+
+  const refreshPublicEvents: () => Promise<void> = useCallback(async () => {
+    if (loading) return;
+    setRefreshing(true);
+    setPublicData(events);
+    setPage(1);
+    setHasMore(true);
+    await loadPublicEvents();
+    setRefreshing(false);
+  }, []);
+
+  useEffect(() => {
+    refreshPublicEvents();
+  }, [])
+
+  const color = useThemeColor({}, 'primary');
+  const bgcolor = useThemeColor({}, 'background');
 
   return (
-    <>
-      <SafeAreaView style={containers.mainContainer}>
-        
-        <ThemedView style={styles.titleContainer}>
-          <ThemedText type="title">Welcome!</ThemedText>
-        </ThemedView>
+    <SafeAreaView style={containers.mainContainer}>
 
+      <FlatList
+        data={events}
+        renderItem={({ item }: { item: PublicEvent }) => <EventItem item={item} key={item.id} />}
+        onEndReached={loadPublicEvents}
+        onEndReachedThreshold={0}
 
-        <ThemedView style={styles.stepContainer}>
-          {/* <ThemedText type="subtitle">{JSON.stringify(events)}</ThemedText> */}
-          <ThemedText>
-            Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-            Press{' '}
-            <ThemedText type="defaultSemiBold">
-              {Platform.select({
-                ios: 'cmd + d',
-                android: 'cmd + m',
-                web: 'F12',
-              })}
-            </ThemedText>{' '}
-            to open developer tools.
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.stepContainer}>
-          <Link href="/modal">
-            <Link.Trigger>
-              <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-            </Link.Trigger>
-            <Link.Preview />
-            <Link.Menu>
-              <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-              <Link.MenuAction
-                title="Share"
-                icon="square.and.arrow.up"
-                onPress={() => alert('Share pressed')}
-              />
-              <Link.Menu title="More" icon="ellipsis">
-                <Link.MenuAction
-                  title="Delete"
-                  icon="trash"
-                  destructive
-                  onPress={() => alert('Delete pressed')}
-                />
-              </Link.Menu>
-            </Link.Menu>
-          </Link>
+        refreshControl={<RefreshControl
+          refreshing={refreshing}
+          onRefresh={refreshPublicEvents}
+          colors={[color]}
+          progressBackgroundColor={bgcolor}
+          tintColor={color}
+        />}
 
-          <ThemedText>
-            {`Tap the Explore tab to learn more about what's included in this starter app.`}
-          </ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.stepContainer}>
-          <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-          <ThemedText>
-            {`When you're ready, run `}
-            <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-            <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-            <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-            <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-          </ThemedText>
-        </ThemedView>
-
-      </SafeAreaView>
-    </>
+        ListFooterComponent={<>
+          {hasMore && <ThemedView style={styles.titleContainer}>
+            <ThemedText>...{t('seeMore')}</ThemedText>
+          </ThemedView>}
+        </>}
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  imageContainer: {
-    // width:
-    maxWidth: '100%',
-    maxHeight: 500,
-  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-
-  logoName: {
-    maxHeight: 150,
-    height: 150,
-    // width: 'auto',
-  }
 });

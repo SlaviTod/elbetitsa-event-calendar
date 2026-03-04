@@ -1,4 +1,4 @@
-import { LoginResponse, User } from '@/types/dist';
+import { LoginResponse, User } from '@/types';
 import { SplashScreen, useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { createContext, PropsWithChildren, useEffect, useState } from "react";

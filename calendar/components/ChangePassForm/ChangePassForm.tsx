@@ -11,7 +11,7 @@ import { ThemedInput } from '../themed/themed-input';
 import { IconButton } from '../buttons/IconButton';
 import { commonStyles, containers } from '@/styling/common';
 import { PassValidationSchema } from './passValidationSchema';
-import { ApiEndpoints, ChangePassForm, ElbetitsaApiCalls } from '@/types/dist';
+import { ApiEndpoints, ChangePassForm, ElbetitsaApiCalls } from '@/types';
 import { requester } from '@/requester/requester';
 import { useRequesterArgs } from '@/hooks/useRequesterArgs';
 import { AuthContext } from '@/contexts/AuthContext';
