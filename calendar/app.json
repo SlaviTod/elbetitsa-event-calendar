@@ -35,7 +35,7 @@
       "favicon": "./assets/img/logo.png"
     },
     "locales": {
-      "bg": "./translator/app-metadata/bg.json",
+      "en": "./translator/app-metadata/en.json",
     },
     "plugins": [
       "expo-router",
@@ -63,6 +63,19 @@
               "en",
               "bg"
             ]
+          }
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 35,
+            "buildToolsVersion": "35.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "15.1"
           }
         }
       ]

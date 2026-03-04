@@ -12,7 +12,7 @@ The app is an [Expo](https://expo.dev) project created with [`create-expo-app`](
 
 
 
-*2*. Start the app 
+*2*. Start the app locally
    npx expo start       or
    npm start
 
@@ -52,9 +52,13 @@ When a particular event is selected its details can be seen on:
 
 
 
-## 
-    3. Authentication & Session Handling
+## Authentication & Session Handling
 Authentication Flow
+When the application starts it allows not authenticated user to see list of all public event of the choir. 
+If they try to access the calendar screen the app redirect to log-in screen. Login required email and password. After successful login user is redirected to the Calendar screen, where the private events of the formation are marked to the calendar. By default the current month is loaded. 
+If user doesn't have an account, my create one on the Registration screen. After successfully registration user is automatically logged in and redirect to calendar screen.  
+On logout user data that are stored in app are cleared and redirect user to home screen. 
+
 Explain step-by-step: 1. What happens when the app starts 2. How authentication status is checked 3. What happens on successful login or registration 4. What happens on logout
 Session Persistence
     • How is the user session stored?

@@ -142,7 +142,7 @@ interface PrivateEventRequest {
     start: Date;
     end: Date;
     durationInMinutes: number;
-    asJson: AsJson;
+    asJson: string;
 }
 interface PrivateEventResponse {
     event: PrivateEvent;
@@ -210,6 +210,12 @@ interface RegisterRequest {
     email: string;
     password: string;
 }
+interface RegisterForm extends RegisterRequest {
+    confirmPassword: string;
+}
+interface CreateUserResponse {
+    user: User;
+}
 
 interface RequesterArgs {
     method: HTTPmethod;
@@ -225,4 +231,4 @@ type QueryObject = {
     [K: string]: number | string;
 };
 
-export { type ApiCalls, ApiEndpoints, ApiRouts, type AsJson, type CalendarEventDetails, type ChangePassForm, type ChangePassRequest, ElbetitsaApiCalls, type FormDataObjectType, type GetEventResponse, type GetEventsResponse, type GetPrivateEventsResponse, type GetRecurringEventsResponse, HTTPmethod, type HTTPrequest, type Language, type LoginRequest, type LoginResponse, OneTimePrivateEvents, type PrivateEvent, type PrivateEventRequest, type PrivateEventResponse, type PrivateEventType, type PrivateEventUpdateRequest, type PublicEvent, PublicEventType, RepetitiveEvents, type RequesterArgs, Role, type Timestamps, type UpdateUserProfileRequest, type UpdateUserResponse, type User, Voice };
+export { type ApiCalls, ApiEndpoints, ApiRouts, type AsJson, type CalendarEventDetails, type ChangePassForm, type ChangePassRequest, type CreateUserResponse, ElbetitsaApiCalls, type FormDataObjectType, type GetEventResponse, type GetEventsResponse, type GetPrivateEventsResponse, type GetRecurringEventsResponse, HTTPmethod, type HTTPrequest, type Language, type LoginRequest, type LoginResponse, OneTimePrivateEvents, type PrivateEvent, type PrivateEventRequest, type PrivateEventResponse, type PrivateEventType, type PrivateEventUpdateRequest, type PublicEvent, PublicEventType, type RegisterForm, type RegisterRequest, RepetitiveEvents, type RequesterArgs, Role, type Timestamps, type UpdateUserProfileRequest, type UpdateUserResponse, type User, Voice };

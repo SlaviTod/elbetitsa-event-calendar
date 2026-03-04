@@ -63,10 +63,7 @@ const Header: React.FC<HeaderProps> = ({
 
           <ThemeButton
             buttonStyle={[commonStyles.themedButtonWithIcon, styles.logButton]}
-            handler={() => {
-              { console.log('header button pressed', isLoggedIn) }
-              isLoggedIn ? router.navigate('/logout') : router.navigate('/login')
-            }}
+            handler={() => { isLoggedIn ? router.navigate('/logout') : router.navigate('/login') }}
             iconName={isLoggedIn ? "log-out" : "log-in"}
             iconSize={33}
             iconColor={commonStyles.themedButtonWithIcon.color}

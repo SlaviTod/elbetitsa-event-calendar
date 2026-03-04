@@ -46,12 +46,12 @@ export const EventForm = ({
 
   const router = useRouter();
 
-  // if (!date) {
-  //   Alert.alert(t('warning'), t('eventForm_msg'), [{
-  //     text: t('close')
-  //   }]);
-  //   router.back();
-  // }
+  if (!date) {
+    Alert.alert(t('warning'), t('eventForm_msg'), [{
+      text: t('close')
+    }]);
+    router.back();
+  }
   const start = date ? DateTime.fromFormat(date, 'yyyy-MM-dd').toJSDate() : DateTime.now().toJSDate();
 
   const { user } = useContext(AuthContext);
@@ -73,7 +73,8 @@ export const EventForm = ({
       Alert.alert(t('warning'), `${t('event_msg_success')}`, [{
         text: t('close')
       }])
-      router.back();
+      // router.back(); // pass month?
+      router.dismissTo('/calendar');
     } catch (err: Error | unknown) {
       // @ts-expect-error ​
       Alert.alert(t('error'), `${t('event_msg_error')}. ${err instanceof Error ? t(err.message) : ''}. ${t('tryAgain')}`, [{
