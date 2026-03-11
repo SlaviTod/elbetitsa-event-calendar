@@ -1,4 +1,3 @@
-import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { useNavigation } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ThemedText } from "@/components/themed/themed-text";
@@ -7,6 +6,8 @@ import { Image } from 'expo-image';
 import { commonStyles, containers } from '@/styling/common';
 import { IconButton } from '@/components/buttons/IconButton';
 import { RegisterForm } from '@/components/RegisterForm/RegisterForm';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView } from "react-native";
 
 
 export default function Register() {
@@ -14,24 +15,24 @@ export default function Register() {
   const navigation = useNavigation();
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
+    <SafeAreaView>
+      <ScrollView>
+
         <Image
           source={require('@/assets/img/Al-nevski.jpg')}
           style={commonStyles.headerImage}
         />
-      }>
-      <ThemedView style={containers.mainContainer}>
+        <ThemedView style={containers.mainContainer}>
 
-      <ThemedView style={containers.titleWithIconButton}>
-        <ThemedText type="title" style={commonStyles.title}>{t('register_sub')}</ThemedText>
-        <IconButton name="return-up-back" size={26} onPressHandler={() => navigation.goBack()}/>
-      </ThemedView>
+          <ThemedView style={containers.titleWithIconButton}>
+            <ThemedText type="title" style={commonStyles.title}>{t('register_sub')}</ThemedText>
+            <IconButton name="return-up-back" size={26} onPressHandler={() => navigation.goBack()} />
+          </ThemedView>
 
-        <RegisterForm />
+          <RegisterForm />
 
-      </ThemedView>
-    </ParallaxScrollView>
+        </ThemedView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }

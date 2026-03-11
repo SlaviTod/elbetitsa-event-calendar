@@ -7,6 +7,7 @@
     "icon": "./assets/img/logo.png",
     "scheme": "elbetitsaeventcalendar",
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
@@ -28,14 +29,13 @@
         "backgroundImage": "./assets/img/logo.png",
         "monochromeImage": "./assets/img/logo.png"
       },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
       "package": "com.elbetitsa.elbetitsaeventcalendar"
     },
     "web": {
       "output": "static",
       "favicon": "./assets/img/logo.png"
-    },
-    "locales": {
-      "en": "./translator/app-metadata/en.json",
     },
     "plugins": [
       "expo-router",
@@ -50,35 +50,11 @@
             "backgroundColor": "#000000"
           }
         }
-      ],
-      [
-        "expo-localization",
-        {
-          "supportedLocales": {
-            "ios": [
-              "en",
-              "bg"
-            ],
-            "android": [
-              "en",
-              "bg"
-            ]
-          }
-        }
-      ],
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "compileSdkVersion": 35,
-            "targetSdkVersion": 35,
-            "buildToolsVersion": "35.0.0"
-          },
-          "ios": {
-            "deploymentTarget": "15.1"
-          }
-        }
       ]
-    ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
   }
 }

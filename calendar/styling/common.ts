@@ -129,11 +129,11 @@ export const commonStyles = StyleSheet.create({
     paddingLeft: 10,
   },
   headerImage: {
-    height: "100%",
+    height: 300,
     width: '100%',
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+    // bottom: 0,
+    // left: 0,
+    // position: 'absolute',
   },
   title: {
     alignSelf: 'center',

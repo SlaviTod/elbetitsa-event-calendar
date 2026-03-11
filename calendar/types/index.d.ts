@@ -121,7 +121,8 @@ interface PrivateEvent {
     timeZone: string;
     asJson: AsJson;
 }
-interface PrivateEventUpdateRequest extends PrivateEvent {
+interface PrivateEventUpdateRequest extends PrivateEventRequest {
+    id: number;
 }
 interface AsJson {
     dayOfTheWeek?: string;
